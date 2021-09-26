@@ -8,15 +8,13 @@ namespace AutoRepair.Data.Entities
     public class Repair : IEntity
     {
         public int Id { get; set; }
-        public DateTime EntryDate { get; set; }
-        public DateTime ExitDate { get; set; }
-        public bool RepairStatus { get; set; }
+
+
         public decimal Price { get; set; }
 
 
         public int AutoPieceId { get; set; }
         public AutoPiece AutoPiece { get; set; }
-        public Mechanic Mechanic { get; set; }
         public int CarId { get; set; }
         public Car Car { get; set; }
         public int ServiceId { get; set; }

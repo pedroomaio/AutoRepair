@@ -9,10 +9,10 @@ namespace AutoRepair.Data.Entities
     {
         public int Id { get; set; }
         public int Name { get; set; }
-
+        public int Rank { get; set; }
 
         public int CreatedByWhoId { get; set; }
-        public User User{ get; set; }
+        public User User { get; set; }
         public int SpecialistId { get; set; }
         public SpecialistType Specialist { get; set; }
     }

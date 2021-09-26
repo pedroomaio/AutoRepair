@@ -13,6 +13,7 @@ namespace AutoRepair.Data
         public DbSet<Invoicing> Invoicings{ get; set; }
         public DbSet<Service> Services{ get; set; }
         public DbSet<AutoPiece> AutoPieces { get; set; }
+        public DbSet<Mark> Marks { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
