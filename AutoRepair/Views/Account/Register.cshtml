@@ -1,0 +1,156 @@
+﻿@model AutoRepair.Models.RegisterNewUserViewModel 
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Account/fonts/material-icon/css/material-design-iconic-font.min.css">
+
+<!-- Main css -->
+<link rel="stylesheet" href="~/Account/css/style.css">
+<script src="~/Account/vendor/jquery/jquery.min.js"></script>
+<script src="~/Account/js/main.js">
+</script>
+
+
+
+
+@*<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly"></div>
+
+            <div class="form-group">
+                <label asp-for="FirstName">First Name</label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-warning"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName">Last Name</label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-warning"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Username">Username</label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-warning"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CountryId" class="control-label"></label>
+                <select asp-for="CountryId" asp-items="Model.Countries" class="form-control"></select>
+                <span asp-validation-for="CountryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CityId" class="control-label"></label>
+                <select asp-for="CityId" asp-items="Model.Cities" class="form-control"></select>
+                <span asp-validation-for="CityId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Address">Address</label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-warning"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PhoneNumber">Phone Number</label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-warning"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-warning"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Confirm">Confirm</label>
+                <input asp-for="Confirm" type="password" class="form-control" />
+                <span asp-validation-for="Confirm" class="text-warning"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Register New User" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>*@
+
+
+<!-- Sign up form -->
+<section class="signup">
+    <div class="container">
+        <div class="signup-content">
+            <div class="signup-form">
+                <h2 class="form-title">Sign up</h2>
+                <form method="POST" class="register-form" id="register-form">
+                    <div class="form-group">
+                        <label asp-for="FirstName" for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input asp-for="FirstName" type="text" id="name" placeholder="First Name" />
+                        <span asp-validation-for="FirstName" class="text-warning"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input asp-for="LastName" type="text" id="name" placeholder="Last Name" />
+                        <span asp-validation-for="LastName" class="text-warning"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Username" for="email"><i class="zmdi zmdi-email"></i></label>
+                        <input asp-for="Username" type="email" id="email" placeholder="Your Email" />
+                        <span asp-validation-for="Username" class="text-warning"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber" for="pass"><i class="zmdi zmdi-phone"></i></label>
+                        <input asp-for="PhoneNumber" id="pass" placeholder="PhoneNumber" />
+                        <span asp-validation-for="Password" class="text-warning"></span>
+                    </div> 
+                    <div class="form-group">
+                        <label asp-for="Password" for="pass"><i class="zmdi zmdi-lock"></i></label>
+                        <input asp-for="Password" type="password" id="pass" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-warning"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Confirm" for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                        <input asp-for="Confirm" type="password" id="re_pass" placeholder="Repeat your password" />
+                        <span asp-validation-for="Confirm" class="text-warning"></span>
+                    </div>  <div class="form-group">
+                        <label asp-for="Address"><i class="zmdi zmdi-store"></i></label>
+                        <input asp-for="Address" type="text" placeholder="Address" />
+                        <span asp-validation-for="Address" class="text-warning"></span>
+                    </div>
+                            <div class="form-group">
+                                <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+                                <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
+                            </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signup" id="signup" onclick="teste();" class="form-submit" value="Register" />
+
+                    </div>
+                </form>
+            </div>
+            <div class="signup-image">
+                <figure><img src="images/signup-image.jpg" alt="sing up image"></figure>
+                <a asp-action="Login" class="signup-image-link">I am already member</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function teste() {
+        var checkedValue = $('.agree-term:checked').val();
+
+        if (checkedValue!="on") {
+            alert("Please, agree with the Terms of service!");
+
+        }
+
+        
+    }
+</script>
+

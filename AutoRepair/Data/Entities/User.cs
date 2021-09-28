@@ -24,7 +24,7 @@ namespace AutoRepair.Data.Entities
         public bool IdClient { get; set; }
         public bool IdEmployee { get; set; }
 
-        public int PostalCodeId { get; set; }
-        public PostalCode PostalCode { get; set; }
+        //public int PostalCodeId { get; set; }
+        //public PostalCode PostalCode { get; set; }
     }
 }
