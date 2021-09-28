@@ -104,48 +104,46 @@ namespace AutoRepair.Controllers
                         return View(model);
                     }
 
-                    var loginViewModel = new LoginViewModel
-                    {
-                        Password = model.Password,
-                        RememberMe = false,
-                        Username = model.Username
-                    };
+                    //var loginViewModel = new LoginViewModel
+                    //{
+                    //    Password = model.Password,
+                    //    RememberMe = false,
+                    //    Username = model.Username
+                    //};
 
-                    var result2 = await _userHelper.LoginAsync(loginViewModel);
-                    if (result2.Succeeded)
+                    //var result2 = await _userHelper.LoginAsync(loginViewModel);
+                    //if (result2.Succeeded)
+                    //{
+                    //    return RedirectToAction("Index", "Home");
+                    //}
+
+                    string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                    string tokenLink = Url.Action("ConfirmEmail", "Account", new
                     {
-                        return RedirectToAction("Index", "Home");
+                        userid = user.Id,
+                        token = myToken
+                    }, protocol: HttpContext.Request.Scheme);
+
+                    Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                        $"To allow the user, " +
+                        $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+
+
+                    if (response.IsSuccess)
+                    {
+                        this.ViewBag.Message = "The instructions to allow you user has been sent to email";
+                        return View(model);
                     }
 
                     ModelState.AddModelError(string.Empty, "The user couldn't be logget.");
-
-
-
-                    //string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    //string tokenLink = Url.Action("ConfirmEmail", "Account", new
-                    //{
-                    //    userid = user.Id,
-                    //    token = myToken
-                    //}, protocol: HttpContext.Request.Scheme);
-
-                    //Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                    //    $"To allow the user, " +
-                    //    $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
-
-
-                    //if (response.IsSuccess)
-                    //{
-                    //    ViewBag.Message = "The instructions to allow you user has been sent to email";
-                    //    return View(model);
-                    //}
-
-                    //ModelState.AddModelError(string.Empty, "The user couldn't be logged.");
 
                 }
             }
 
             return View(model);
         }
+
+
 
         public async Task<IActionResult> ChangeUser()
         {

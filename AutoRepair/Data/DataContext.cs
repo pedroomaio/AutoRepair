@@ -7,7 +7,6 @@ namespace AutoRepair.Data
     {
         public DbSet<Car> Cars { get; set; }
         public DbSet<Mechanic> Mechanics { get; set; }
-        public DbSet<PostalCode> PostalCodes { get; set; }
         public DbSet<SpecialistType> SpecialistTypes { get; set; }
         public DbSet<Repair> Repairs{ get; set; }
         public DbSet<Invoicing> Invoicings{ get; set; }
