@@ -29,6 +29,7 @@ namespace AutoRepair.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    AgreeTerm = table.Column<bool>(type: "bit", nullable: false),
                     IdAmin = table.Column<bool>(type: "bit", nullable: false),
                     IdClient = table.Column<bool>(type: "bit", nullable: false),
                     IdEmployee = table.Column<bool>(type: "bit", nullable: false),
@@ -203,9 +204,8 @@ namespace AutoRepair.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Model = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Modelo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Colour = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClientId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -225,27 +225,20 @@ namespace AutoRepair.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Rank = table.Column<int>(type: "int", nullable: false),
-                    CreatedByWhoId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    SpecialistId = table.Column<int>(type: "int", nullable: false)
+                    SpecialistId = table.Column<int>(type: "int", nullable: false),
+                    SpecialistTypeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mechanics", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Mechanics_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Mechanics_SpecialistTypes_SpecialistId",
-                        column: x => x.SpecialistId,
+                        name: "FK_Mechanics_SpecialistTypes_SpecialistTypeId",
+                        column: x => x.SpecialistTypeId,
                         principalTable: "SpecialistTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -401,14 +394,9 @@ namespace AutoRepair.Migrations
                 column: "RepairId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mechanics_SpecialistId",
+                name: "IX_Mechanics_SpecialistTypeId",
                 table: "Mechanics",
-                column: "SpecialistId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Mechanics_UserId",
-                table: "Mechanics",
-                column: "UserId");
+                column: "SpecialistTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Repairs_AutoPieceId",

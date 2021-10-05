@@ -9,5 +9,6 @@ namespace AutoRepair.Data.Entities
     {
         public int Id { get; set; }
         public string SpecialistTypeName { get; set; }
+        public ICollection<Mechanic> Mechanics { get; set; }
     }
 }

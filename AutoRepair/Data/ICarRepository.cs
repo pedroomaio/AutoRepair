@@ -1,4 +1,5 @@
 ﻿using AutoRepair.Data.Entities;
+using AutoRepair.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace AutoRepair.Data
     {
         public IQueryable GetAllWithUsers();
 
-
-        IEnumerable<SelectListItem> GetComboProducts();
+        
+        IEnumerable<SelectListItem> GetComboCars();
     }
 }

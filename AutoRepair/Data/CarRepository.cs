@@ -23,7 +23,7 @@ namespace AutoRepair.Data
             return _context.Cars.Include(p => p.User);
         }
 
-        public IEnumerable<SelectListItem> GetComboProducts()
+        public IEnumerable<SelectListItem> GetComboCars()
         {
 
             var list = _context.Cars.Select(p => new SelectListItem
@@ -34,7 +34,7 @@ namespace AutoRepair.Data
 
             list.Insert(0, new SelectListItem
             {
-                Text = "(Select a product...)",
+                Text = "(Select a car...)",
                 Value = "0"
             });
 

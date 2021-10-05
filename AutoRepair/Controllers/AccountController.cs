@@ -62,7 +62,10 @@ namespace AutoRepair.Controllers
                 }
             }
 
-            this.ModelState.AddModelError(string.Empty, "Failed to login!");
+            ModelState.AddModelError(string.Empty, "Failed to login!");
+
+
+
             return View(model);
         }
 
@@ -95,6 +98,7 @@ namespace AutoRepair.Controllers
                         UserName = model.Username,
                         Address = model.Address,
                         PhoneNumber = model.PhoneNumber,
+                        AgreeTerm = model.AgreeTerm
                     };
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
@@ -131,7 +135,7 @@ namespace AutoRepair.Controllers
 
                     if (response.IsSuccess)
                     {
-                        this.ViewBag.Message = "The instructions to allow you user has been sent to email";
+                        ModelState.AddModelError(string.Empty, "The instructions to allow you user has been sent to email");
                         return View(model);
                     }
 
@@ -139,7 +143,7 @@ namespace AutoRepair.Controllers
 
                 }
             }
-
+            ModelState.AddModelError(string.Empty, "The user couldn't be created.");
             return View(model);
         }
 
@@ -155,7 +159,7 @@ namespace AutoRepair.Controllers
                 model.LastName = user.LastName;
                 model.Address = user.Address;
                 model.PhoneNumber = user.PhoneNumber;
-
+                model.AgreeTerm = user.AgreeTerm;
 
             }
             return View(model);
@@ -176,6 +180,7 @@ namespace AutoRepair.Controllers
                     user.LastName = model.LastName;
                     user.Address = model.Address;
                     user.PhoneNumber = model.PhoneNumber;
+                    user.AgreeTerm = model.AgreeTerm;
 
                     var response = await _userHelper.UpdateUserAsync(user);
                     if (response.Succeeded)

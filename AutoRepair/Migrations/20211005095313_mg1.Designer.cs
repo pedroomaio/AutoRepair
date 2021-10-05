@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoRepair.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210928105237_mg1")]
+    [Migration("20211005095313_mg1")]
     partial class mg1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,13 +43,10 @@ namespace AutoRepair.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Colour")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Model")
+                    b.Property<string>("Modelo")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -126,11 +123,8 @@ namespace AutoRepair.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CreatedByWhoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rank")
                         .HasColumnType("int");
@@ -138,14 +132,12 @@ namespace AutoRepair.Migrations
                     b.Property<int>("SpecialistId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("SpecialistTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SpecialistId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("SpecialistTypeId");
 
                     b.ToTable("Mechanics");
                 });
@@ -229,6 +221,9 @@ namespace AutoRepair.Migrations
                     b.Property<string>("Address")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("AgreeTerm")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -474,19 +469,9 @@ namespace AutoRepair.Migrations
 
             modelBuilder.Entity("AutoRepair.Data.Entities.Mechanic", b =>
                 {
-                    b.HasOne("AutoRepair.Data.Entities.SpecialistType", "Specialist")
-                        .WithMany()
-                        .HasForeignKey("SpecialistId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AutoRepair.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Specialist");
-
-                    b.Navigation("User");
+                    b.HasOne("AutoRepair.Data.Entities.SpecialistType", null)
+                        .WithMany("Mechanics")
+                        .HasForeignKey("SpecialistTypeId");
                 });
 
             modelBuilder.Entity("AutoRepair.Data.Entities.Repair", b =>
@@ -571,6 +556,11 @@ namespace AutoRepair.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AutoRepair.Data.Entities.SpecialistType", b =>
+                {
+                    b.Navigation("Mechanics");
                 });
 #pragma warning restore 612, 618
         }

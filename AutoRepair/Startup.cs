@@ -65,8 +65,13 @@ namespace AutoRepair
 
             services.AddFlashMessage();
 
-
+            services.AddTransient<SeedDb>();
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<IAutoPieceRepository, AutoPieceRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<ISpecialistTypeRepository, SpecialistTypeRepository>();
+            services.AddScoped<IMechanicRepository, MechanicRepository>();
 
 
             services.AddScoped<IMailHelper, MailHelper>();
@@ -74,7 +79,7 @@ namespace AutoRepair
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/Account/NotAuthorized";
+                options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/NotAuthorized";
             });
 

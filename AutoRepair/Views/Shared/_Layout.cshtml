@@ -35,23 +35,52 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <!--<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">-->
+                    @*<ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                    </ul>
-                </div>
+                    </ul>*@
+                <!--</div>-->
                 <nav class="main-nav">
                     <ul class="navbar-nav">
-                        @if (this.User.Identity.IsAuthenticated)
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Users</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">All Cars</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">All Services</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="SpecialistType" asp-action="Index">All Specialist Type</a></li>
+                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="AutoPieces" asp-action="Index">All Auto Pieces</a></li>
+                                </ul>
+                            </li>
+                        }
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Customer"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="Index">Marks</a>
+                            </li>
+                        }
+                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Employee"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">Your Cars</a>
                             </li>
+                        }
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="ChangeUser">@this.User.Identity.Name</a>
                             </li>
@@ -69,7 +98,7 @@
                             </li>
                         }
                         @*<li><a class="cd-signin" href="#0">Sign in</a></li>
-        <li><a class="cd-signup" href="#0">Sign up</a></li>*@
+                            <li><a class="cd-signup" href="#0">Sign up</a></li>*@
                     </ul>
                 </nav>
             </div>

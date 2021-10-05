@@ -5,15 +5,11 @@ using System.Threading.Tasks;
 
 namespace AutoRepair.Data.Entities
 {
-    public class Mechanic
+    public class Mechanic : IEntity
     {
         public int Id { get; set; }
-        public int Name { get; set; }
+        public string Name { get; set; }
         public int Rank { get; set; }
-
-        public int CreatedByWhoId { get; set; }
-        public User User { get; set; }
         public int SpecialistId { get; set; }
-        public SpecialistType Specialist { get; set; }
     }
 }

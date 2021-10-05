@@ -20,7 +20,7 @@ namespace AutoRepair.Models
 
         [MaxLength(100, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Address { get; set; }
-
+        public bool AgreeTerm { get; set; }
 
         [MaxLength(20, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string PhoneNumber { get; set; }

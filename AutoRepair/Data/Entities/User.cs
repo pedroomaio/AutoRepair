@@ -15,7 +15,7 @@ namespace AutoRepair.Data.Entities
 
         [MaxLength(100, ErrorMessage = "The field {0} only can contain {1} characters lenght.")]
         public string Address { get; set; }
-
+        public bool AgreeTerm { get; set; }
 
         [Display(Name = "Full Name")]
         public string FullName => $"{FirstName} {LastName}";
