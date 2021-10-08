@@ -72,8 +72,6 @@ namespace AutoRepair
             services.AddScoped<IServiceRepository, ServiceRepository>();
             services.AddScoped<ISpecialistTypeRepository, SpecialistTypeRepository>();
             services.AddScoped<IMechanicRepository, MechanicRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IConverterUserHelper, ConverterUserHelper>();
 
 
             services.AddScoped<IMailHelper, MailHelper>();
@@ -81,7 +79,7 @@ namespace AutoRepair
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/Account/NotAuthorized";
+                options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/NotAuthorized";
             });
 
@@ -98,12 +96,10 @@ namespace AutoRepair
             }
             else
             {
-                app.UseExceptionHandler("/Errors/Error");
+                app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseStatusCodePagesWithReExecute("/error/{0}");
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using System;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace AutoRepair.Data.Entities
@@ -22,8 +20,6 @@ namespace AutoRepair.Data.Entities
         [Display(Name = "Full Name")]
         public string FullName => $"{FirstName} {LastName}";
 
-        [Display(Name = "Image")]
-        public Guid ImageFile { get; set; }
         public bool IdAmin { get; set; }
         public bool IdClient { get; set; }
         public bool IdEmployee { get; set; }

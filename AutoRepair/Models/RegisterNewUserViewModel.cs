@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,8 +24,7 @@ namespace AutoRepair.Models
         [MaxLength(100, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Address { get; set; }
         public bool AgreeTerm { get; set; }
-        [Display(Name = "Image")]
-        public IFormFile ImageFile { get; set; }
+
 
         [MaxLength(20, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string PhoneNumber { get; set; }

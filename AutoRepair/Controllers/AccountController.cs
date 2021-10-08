@@ -19,20 +19,17 @@ namespace AutoRepair.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IMailHelper _mailHelper;
         private readonly IConfiguration _configuration;
-        private readonly IBlobHelper _blobHelper;
         //private readonly ICountryRepository _countryRepository;
 
         public AccountController(
             IUserHelper userHelper,
             IMailHelper mailHelper,
-            IConfiguration configuration,
-            IBlobHelper blobHelper)
+            IConfiguration configuration)
         //ICountryRepository countryRepository)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _configuration = configuration;
-            _blobHelper = blobHelper;
             //_countryRepository = countryRepository;
         }
 
@@ -64,7 +61,6 @@ namespace AutoRepair.Controllers
                     return this.RedirectToAction("Index", "Home");
                 }
             }
-            ViewBag.message = "qwe";
 
             ModelState.AddModelError(string.Empty, "Failed to login!");
 
@@ -93,13 +89,6 @@ namespace AutoRepair.Controllers
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
                 if (user == null)
                 {
-                    //Guid imageId = Guid.Empty;
-
-                    //if (model.ImageFile != null && model.ImageFile.Length > 0)
-                    //{
-
-                    //    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
-                    //}
 
                     user = new User
                     {
@@ -112,8 +101,6 @@ namespace AutoRepair.Controllers
                         AgreeTerm = model.AgreeTerm
                     };
 
-
-
                     var result = await _userHelper.AddUserAsync(user, model.Password);
                     if (result != IdentityResult.Success)
                     {
@@ -121,15 +108,18 @@ namespace AutoRepair.Controllers
                         return View(model);
                     }
 
-                    await _userHelper.AddUserToRoleAsync(user, "Customer");
-                    var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    await _userHelper.ConfirmEmailAsync(user, token);
+                    //var loginViewModel = new LoginViewModel
+                    //{
+                    //    Password = model.Password,
+                    //    RememberMe = false,
+                    //    Username = model.Username
+                    //};
 
-                    var isInRole = await _userHelper.IsUserInRoleAsync(user, "Customer");
-                    if (!isInRole)
-                    {
-                        await _userHelper.AddUserToRoleAsync(user, "Customer");
-                    }
+                    //var result2 = await _userHelper.LoginAsync(loginViewModel);
+                    //if (result2.Succeeded)
+                    //{
+                    //    return RedirectToAction("Index", "Home");
+                    //}
 
                     string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                     string tokenLink = Url.Action("ConfirmEmail", "Account", new

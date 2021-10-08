@@ -1,7 +1,6 @@
 ﻿using AutoRepair.Data.Entities;
 using AutoRepair.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AutoRepair.Helpers
