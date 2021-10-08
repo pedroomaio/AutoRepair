@@ -32,42 +32,53 @@ namespace AutoRepair.Controllers
         }
 
         // GET: Products
+
+        [Authorize(Roles = "Admin,Customer")]
+
         public IActionResult Index()
         {
-            //var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
-            //var a = _userHelper.CheckRoleAsync("Admin");
-            //var b = _userHelper.IsUserInRoleAsync(user, "Admin");
-            ////if ()
-            ////{
-            ////    return View(_carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name).OrderBy(p => p.Modelo));
-            ////}
-            ////else
-            ////{
-            ////    return View(_carRepository.GetAll().OrderBy(p => p.Modelo));
-            ////}
-            return View(_carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name).OrderBy(p => p.Modelo));
+
+            if (User.IsInRole("Admin"))
+            {
+                return View(_carRepository.GetAll().OrderBy(p => p.Modelo));
+            }
+            else
+            {
+                return View(_carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name).OrderBy(p => p.Modelo));
+            }
+
         }
 
         // GET: Products/Details/5
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return new NotFoundViewResult("ProductNotFound");
-            }
+                if (id == null)
+                {
+                    return new NotFoundViewResult("CarNotFound");
+                }
 
-            var product = await _carRepository.GetByIdAsync(id.Value);
-            if (product == null)
-            {
-                return new NotFoundViewResult("ProductNotFound");
-            }
+                var car = await _carRepository.GetByIdAsync(id.Value);
+                if (car == null)
+                {
+                    return new NotFoundViewResult("CarNotFound");
+                }
 
-            return View(product);
+                foreach (var item in _carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name))
+                {
+                    if (id == item.Id)
+                    {
+                        var model = _converterHelper.ToProductViewModel(car);
+                        return View(model);
+                    }
+                }
+
+                return View(car);
         }
 
 
         //// GET: Products/Create
-        [Authorize]
+        [Authorize(Roles = "Admin,Customer")]
         public IActionResult Create()
         {
             return View();
@@ -79,6 +90,7 @@ namespace AutoRepair.Controllers
         [HttpPost]
 
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Create(CarsViewModel model)
         {
             if (ModelState.IsValid)
@@ -96,23 +108,33 @@ namespace AutoRepair.Controllers
 
 
         //// GET: Products/Edit/5
-        [Authorize]
+
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return new NotFoundViewResult("ProductNotFound");
+                return new NotFoundViewResult("CarNotFound");
             }
 
-            var product = await _carRepository.GetByIdAsync(id.Value);
-            if (product == null)
+            var car = await _carRepository.GetByIdAsync(id.Value);
+
+
+            if (car == null)
             {
-                return new NotFoundViewResult("ProductNotFound");
+                return new NotFoundViewResult("CarNotFound");
+            }
+            foreach (var item in _carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name))
+            {
+                if (id == item.Id)
+                {
+                    var model = _converterHelper.ToProductViewModel(car);
+                    return View(model);
+                }
             }
 
 
-            var model = _converterHelper.ToProductViewModel(product);
-            return View(model);
+            return new NotFoundViewResult("CarNotFound");
         }
 
 
@@ -121,6 +143,7 @@ namespace AutoRepair.Controllers
         //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Edit(CarsViewModel model)
         {
 
@@ -128,14 +151,6 @@ namespace AutoRepair.Controllers
             {
                 try
                 {
-
-                    //Guid imageId = model.ImageId;
-
-                    //if (model.ImageFile != null && model.ImageFile.Length > 0)
-                    //{
-                    //    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
-                    //}
-
                     var product = _converterHelper.ToProduct(model, false);
 
 
@@ -161,27 +176,38 @@ namespace AutoRepair.Controllers
         }
 
         //// GET: Products/Delete/5
-        [Authorize]
+
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
-                return new NotFoundViewResult("ProductNotFound");
+                return new NotFoundViewResult("CarNotFound");
             }
+
 
             var car = await _carRepository.GetByIdAsync(id.Value);
             if (car == null)
             {
-                return new NotFoundViewResult("ProductNotFound");
+                return new NotFoundViewResult("CarNotFound");
             }
 
+            foreach (var item in _carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name))
+            {
+                if (id == item.Id)
+                {
+                    var model = _converterHelper.ToProductViewModel(car);
+                    return View(model);
+                }
+            }
             return View(car);
         }
 
         //// POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _carRepository.GetByIdAsync(id);
@@ -208,7 +234,7 @@ namespace AutoRepair.Controllers
 
         }
 
-        public IActionResult ProductNotFound()
+        public IActionResult CarNotFound()
         {
             return View();
         }

@@ -1,4 +1,4 @@
-﻿@model AutoRepair.Models.RegisterNewUserViewModel
+﻿@model AutoRepair.Models.EmployeeRegisterViewModel
 @{
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -19,6 +19,10 @@
         <div class="signup-content">
             <div class="signup-form">
                 <h2 class="form-title">Sign up</h2>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Launch demo modal
+                </button>
+
                 <form method="POST" class="register-form" id="register-form">
                     <div class="form-group">
                         <label asp-for="FirstName" for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
@@ -35,30 +39,7 @@
                         <input asp-for="Username" type="email" id="email" placeholder="Your Email" />
                         <span asp-validation-for="Username" class="text-warning"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="PhoneNumber" for="pass"><i class="zmdi zmdi-phone"></i></label>
-                        <input asp-for="PhoneNumber" id="pass" placeholder="PhoneNumber" />
-                        <span asp-validation-for="Password" class="text-warning"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password" for="pass"><i class="zmdi zmdi-lock"></i></label>
-                        <input asp-for="Password" type="password" id="pass" placeholder="Password" />
-                        <span asp-validation-for="Password" class="text-warning"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Confirm" for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                        <input asp-for="Confirm" type="password" id="re_pass" placeholder="Repeat your password" />
-                        <span asp-validation-for="Confirm" class="text-warning"></span>
-                    </div>  <div class="form-group">
-                        <label asp-for="Address"><i class="zmdi zmdi-store"></i></label>
-                        <input asp-for="Address" type="text" placeholder="Address" />
-                        <span asp-validation-for="Address" class="text-warning"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                        <label asp-for="AgreeTerm" for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
-
-                    </div>
+                   
                     <div class="form-group form-button">
 
                         <input type="submit" name="signup" id="signup" onclick="teste();" class="form-submit" value="Register" />
@@ -73,3 +54,19 @@
         </div>
     </div>
 </section>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Failed</h5>
+                </div>
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -23,6 +23,7 @@ namespace AutoRepair.Data
             return _context.Cars.Include(p => p.User);
         }
 
+
         public IEnumerable<SelectListItem> GetComboCars()
         {
 
