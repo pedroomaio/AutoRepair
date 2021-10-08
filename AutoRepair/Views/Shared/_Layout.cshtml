@@ -8,115 +8,104 @@
     <link rel="stylesheet" href="~/css/site.css" />
 
 
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript"></script>
-
-        <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/148866/reset.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-        <link rel="stylesheet" href="./css/loginCreate.css">
-
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-        <script src="./script.js"></script>*@
-
-
     <link rel="stylesheet" href="~/Account/fonts/material-icon/css/material-design-iconic-font.min.css">
 
     <!-- Main css -->
     <link rel="stylesheet" href="~/Account/css/style.css">
     <script src="~/Account/vendor/jquery/jquery.min.js"></script>
+    <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
-            <div class="container">
+        <nav class="navbar navbar-expand-sm bg-secondary" style="height: 90px; ">
+            <div class="container bg-secondary" style="height: 0;">
 
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index" style=" width: 6%;"><img src="~/Img/Icon.png" /></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <!--<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">-->
-                    @*<ul class="navbar-nav flex-grow-1">
+
+                <ul class="navbar-nav display-flex-center">
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown text-dark">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="index">Employees</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown text-dark">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Customers</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">All Cars</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">All Services</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="SpecialistType" asp-action="Index">All Specialist Type</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="AutoPieces" asp-action="Index">All Auto Pieces</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Employee"))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+
+                            <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="Index">Marks</a>
+                        </li>
+                    }
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Customer"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">Your Cars</a>
+                        </li>
+                    }
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <lord-icon src="https://cdn.lordicon.com/dxjqoygy.json"
+                                           trigger="loop-on-hover"
+                                           colors="primary:#121331,secondary:#000000"
+                                           style="width:100px;height:100px">
+                                </lord-icon>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li class="nav-item">
+                                    <a class="text-dark font-weight-bold">@this.User.Identity.Name</a>
+                                </li>
+                                <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="ChangeUser">Edit Profile</a></li>
+                                <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="ResetPassword">Reset Password</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="Logout">
+                                <lord-icon src="https://cdn.lordicon.com/lywgqtim.json"
+                                           trigger="loop-on-hover"
+                                           colors="primary:#000000,secondary:#000000"
+                                           style="width:100px;height:100px">
+                                </lord-icon>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                         </li>
-                    </ul>*@
-                <!--</div>-->
-                <nav class="main-nav">
-                    <ul class="navbar-nav">
-                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Users</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">All Cars</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">All Services</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="SpecialistType" asp-action="Index">All Specialist Type</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="AutoPieces" asp-action="Index">All Auto Pieces</a></li>
-                                </ul>
-                            </li>
-                        }
-                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Customer"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="Index">Marks</a>
-                            </li>
-                        }
-                        @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Employee"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">Your Cars</a>
-                            </li>
-                        }
-                        @if (this.User.Identity.IsAuthenticated)
-                        {
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="ChangeUser">@this.User.Identity.Name</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                            </li>
-                        }
-                        @*<li><a class="cd-signin" href="#0">Sign in</a></li>
-                            <li><a class="cd-signup" href="#0">Sign up</a></li>*@
-                    </ul>
-                </nav>
+                    }
+                    @*<li><a class="cd-signin" href="#0">Sign in</a></li>
+                        <li><a class="cd-signup" href="#0">Sign up</a></li>*@
+                </ul>
             </div>
         </nav>
 
-        <!--<nav class="main-nav">
-            <ul>-->
-        <!-- inser more links here -->
-        <!--<li><a class="cd-signin" href="#0">Sign in</a></li>
-                <li><a class="cd-signup" href="#0">Sign up</a></li>
-            </ul>
-        </nav>-->
     </header>
 
 
 
-    <div class="container" style="background-color:transparent">
-        <main role="main" style="background-color:transparent" class="pb-3">
+    <div class="container">
+        <main role="main" style="margin-top:4%">
             @RenderBody()
         </main>
     </div>
@@ -132,3 +121,7 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="js/scripts.js"></script>

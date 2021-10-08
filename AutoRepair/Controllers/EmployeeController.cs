@@ -1,9 +1,11 @@
-﻿using AutoRepair.Data.Entities;
+﻿using AutoRepair.Data;
+using AutoRepair.Data.Entities;
 using AutoRepair.Helpers;
 using AutoRepair.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -21,59 +23,42 @@ namespace AutoRepair.Controllers
         private readonly IUserHelper _userHelper;
         private readonly IMailHelper _mailHelper;
         private readonly IConfiguration _configuration;
+        private readonly IUserRepository _userRepository;
+        private readonly IConverterUserHelper _converterUserHelper;
+       
         //private readonly ICountryRepository _countryRepository;
 
         public EmployeeController(
             IUserHelper userHelper,
             IMailHelper mailHelper,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IUserRepository userRepository,
+            IConverterUserHelper converterUserHelpe)
         //ICountryRepository countryRepository)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _configuration = configuration;
+            _userRepository = userRepository;
+            
             //_countryRepository = countryRepository;
         }
 
-
-        //public IActionResult Login()
-        //{
-        //    if (User.Identity.IsAuthenticated)
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-
-        //    return View();
-        //}
+        [Authorize(Roles = "Admin")]
+        public IActionResult Index()
+        {
+            //var a = _userRepository.GetAllUser();
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> Login(LoginViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _userHelper.LoginAsync(model);
-        //        if (result.Succeeded)
-        //        {
-        //            if (this.Request.Query.Keys.Contains("ReturnUrl"))
-        //            {
-        //                return Redirect(this.Request.Query["ReturnUrl"].First());
-        //            }
+            return View(_userRepository.GetAllUser());
 
-        //            return this.RedirectToAction("Index", "Home");
-        //        }
-        //    }
+        }
 
-        //    this.ModelState.AddModelError(string.Empty, "Failed to login!");
-        //    return View(model);
-        //}
-
-
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await _userHelper.LogoutAsync();
-        //    return RedirectToAction("Index", "Home");
-        //}
+        public async Task<IActionResult> Logout()
+        {
+            await _userHelper.LogoutAsync();
+            return RedirectToAction("Index", "Home");
+        }
 
         [Authorize(Roles = "Admin")]
         public IActionResult Register()
@@ -82,7 +67,7 @@ namespace AutoRepair.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterNewUserViewModel model)
+        public async Task<IActionResult> Register(EmployeeRegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -96,12 +81,10 @@ namespace AutoRepair.Controllers
                         LastName = model.LastName,
                         Email = model.Username,
                         UserName = model.Username,
-                        Address = model.Address,
-                        PhoneNumber = model.PhoneNumber,
-                        AgreeTerm = model.AgreeTerm
+                        AgreeTerm = true,
                     };
 
-                    var result = await _userHelper.AddUserAsync(user, model.Password);
+                    var result = await _userHelper.AddUserAsync(user, "123456");
                     if (result != IdentityResult.Success)
                     {
                         ModelState.AddModelError(string.Empty, "The user couldn't be created.");
@@ -111,6 +94,7 @@ namespace AutoRepair.Controllers
                     await _userHelper.AddUserToRoleAsync(user, "Employee");
                     var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                     await _userHelper.ConfirmEmailAsync(user, token);
+
                 }
 
                 var isInRole = await _userHelper.IsUserInRoleAsync(user, "Employee");
@@ -121,20 +105,31 @@ namespace AutoRepair.Controllers
                 else
                 {
                     string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    string tokenLink = Url.Action("ChangePassword", "Account", new
+                    string tokenLink = Url.Action("Login", "Account", new
                     {
-                        userid = user.Id,
-                        token = myToken
+
                     }, protocol: HttpContext.Request.Scheme);
 
                     Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                        $"To allow the user, " +
-                        $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+                                              $"To allow the user, " +
+                        $"<br /><br /><br /> <h1>------- Account Details---------------------------------------------------------------</h1>" +
+                        $"<br /><br />" +
+
+                        $"Gmail: {user.Email}" + $"<br />" +
+                        $"Password: 123456" +
+
+                        $"<br /><br />IMPORTANT:" +
+                        $"<br />Change password!!" +
+                        $"<br /><br /><br />Please click in this link:</br></br><a href = \"{tokenLink}\">Go to Login Email</a>");
 
 
                     if (response.IsSuccess)
                     {
-                        this.ViewBag.Message = "The instructions to allow you user has been sent to email";
+                        ModelState.AddModelError(string.Empty, "Employee created successfully!" +
+                            "\n\nAn email has been sent to employee confirming the account.");
+
+                        await Logout();
+
                         return View(model);
                     }
 
@@ -142,59 +137,10 @@ namespace AutoRepair.Controllers
                 }
 
             }
-
+            ModelState.AddModelError(string.Empty, "The user couldn't be created.");
             return View(model);
         }
 
-
-
-        public async Task<IActionResult> ChangeUser()
-        {
-            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-            var model = new ChangeUserViewModel();
-            if (user != null)
-            {
-                model.FirstName = user.FirstName;
-                model.LastName = user.LastName;
-                model.Address = user.Address;
-                model.PhoneNumber = user.PhoneNumber;
-                model.AgreeTerm = user.AgreeTerm;
-
-            }
-            return View(model);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> ChangeUser(ChangeUserViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-                if (user != null)
-                {
-
-
-                    user.FirstName = model.FirstName;
-                    user.LastName = model.LastName;
-                    user.Address = model.Address;
-                    user.PhoneNumber = model.PhoneNumber;
-                    user.AgreeTerm = model.AgreeTerm;
-
-                    var response = await _userHelper.UpdateUserAsync(user);
-                    if (response.Succeeded)
-                    {
-                        ViewBag.UserMessage = "User updated!";
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault().Description);
-                    }
-                }
-            }
-
-            return View(model);
-        }
 
         public IActionResult ChangePassword()
         {
@@ -210,7 +156,7 @@ namespace AutoRepair.Controllers
                 var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 if (user != null)
                 {
-                    var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    var result = await _userHelper.ChangePasswordAsync(user, user.PasswordHash, model.NewPassword);
                     if (result.Succeeded)
                     {
                         return this.RedirectToAction("ChangeUser");
@@ -373,7 +319,70 @@ namespace AutoRepair.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return new NotFoundViewResult("CarNotFound");
+            }
 
+            var user = await _userRepository.GetByIdAsync(id);
+
+
+            if (user == null)
+            {
+                return new NotFoundViewResult("CarNotFound");
+            }
+            foreach (var item in _userRepository.GetAllUser())
+            {
+                if (id == item.Id)
+                {
+                    var model = _converterUserHelper.ToUserViewModel(user);
+                    return View(model);
+                }
+            }
+
+
+            return new NotFoundViewResult("CarNotFound");
+        }
+
+
+        //// POST: Products/Edit/5
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(UsersViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = _converterUserHelper.ToUser(model);
+
+
+                    //TODO: Modificar para o user que tiver logado
+                    //product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                    await _userRepository.UpdateAsync(user);
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _userRepository.ExistAsync(model.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
         //[HttpPost]
         //[Route("Account/GetCitiesAsync")]
         //public async Task<JsonResult> GetCitiesAsync(int countryId)
