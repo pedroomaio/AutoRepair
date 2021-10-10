@@ -9,28 +9,38 @@ namespace AutoRepair.Helpers
 {
     public class ConverterHelper : IConverterHelper
     {
-        public Car ToProduct(CarsViewModel model, bool isNew)
+        public Car ToCar(CarsViewModel model, bool isNew)
         {
             return new Car
             {
                 Id = isNew ? 0 : model.Id,
+                Brand = model.Brand,
+                RegisterCar = model.RegisterCar,
+                Year = model.Year,
                 Model = model.Model,
                 Colour = model.Colour,
-                User = model.User
+                User = model.User,
+                BrandId = model.BrandId,
+                ModelId = model.ModelId
             };
         }
 
-        public CarsViewModel ToProductViewModel(Car Cars)
+        public CarsViewModel ToCarsViewModel(Car Cars)
         {
             return new CarsViewModel
             {
                 Id = Cars.Id,
+                Brand = Cars.Brand,
+                RegisterCar = Cars.RegisterCar,
+                Year = Cars.Year,
                 Model = Cars.Model,
                 Colour = Cars.Colour,
-                User = Cars.User
+                User = Cars.User,
+                ModelId = Cars.ModelId,
+                BrandId = Cars.BrandId
             };
         }
 
-      
+
     }
 }

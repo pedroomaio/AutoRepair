@@ -20,14 +20,14 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-    <a asp-action="AddCity" asp-route-id="@Model.Id" class="btn btn-info">Add City</a>
+    <a asp-action="AddBrand" asp-route-id="@Model.Id" class="btn btn-info">Add Brand</a>
     <a asp-action="Index" class="btn btn-success">Back to List</a>
 </div>
 
-<h4>Cities</h4>
+<h4>Brands</h4>
 @if (Model.brands == null || Model.brands.Count == 0)
 {
-    <h5>No cities added yet</h5>
+    <h5>No brands added yet</h5>
 }
 else
 {
@@ -48,8 +48,8 @@ else
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td id="@item.Id">
-                        <a asp-action="EditCity" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                        <a asp-action="DeleteCity" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Delete</a>
+                        <a asp-action="EditBrand" asp-route-id="@item.UserId" class="btn btn-warning">Edit</a>
+                        <a asp-action="DeleteBrand" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Delete</a>
                     </td>
                 </tr>
             }

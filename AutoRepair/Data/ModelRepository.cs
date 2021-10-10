@@ -78,11 +78,23 @@ namespace AutoRepair.Data
         }
 
 
-        public async Task<Brand> GetBrandAsync(string id)
+        public async Task<Brand> GetBrandWithUserAsync(string id)
         {
             //return await _context.Brands.FindAsync(id);
+
+            var a = _context.Brands;
             return await _context.Brands
-                .Where(c => c.Users.Any(ci => ci.Id == id))
+                .Where(c => c.UserId == id)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task<Brand> GetBrandAsync(int id)
+        {
+            //return await _context.Brands.FindAsync(id);
+
+            var a =  _context.Brands;
+            return await _context.Brands
+                .Where(c => c.Id == id)
                 .FirstOrDefaultAsync();
         }
 
@@ -130,7 +142,7 @@ namespace AutoRepair.Data
 
                 list.Insert(0, new SelectListItem
                 {
-                    Text = "(Select a citie...)",
+                    Text = "(Select a brand...)",
                     Value = "0"
                 });
 

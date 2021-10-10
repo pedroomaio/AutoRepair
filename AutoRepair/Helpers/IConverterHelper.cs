@@ -5,9 +5,9 @@ namespace AutoRepair.Helpers
 {
     public interface IConverterHelper
     {
-        Car ToProduct(CarsViewModel model, bool isNew);
+        Car ToCar(CarsViewModel model, bool isNew);
 
-        CarsViewModel ToProductViewModel(Car car);
+        CarsViewModel ToCarsViewModel(Car car);
         //public AutoPiece ToAutoPiece(AutoPiecesViewModel models, bool isNew);
 
         //public AutoPiecesViewModel ToAutoPieceViewModel(AutoPiece autoPiece);

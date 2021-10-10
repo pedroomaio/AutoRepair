@@ -18,17 +18,20 @@ namespace AutoRepair.Controllers
         private readonly IUserHelper _userHelper;
         //private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
+        private readonly IModelRepository _modelRepository;
 
         public CarsController(
             ICarRepository carRepository,
             IUserHelper userHelper,
             //IBlobHelper blobHelper)
-            IConverterHelper converterHelper)
+            IConverterHelper converterHelper,
+            IModelRepository modelRepository)
         {
             _carRepository = carRepository;
             _userHelper = userHelper;
             //_blobHelper = blobHelper;
             _converterHelper = converterHelper;
+            _modelRepository = modelRepository;
         }
 
         // GET: Products
@@ -46,42 +49,67 @@ namespace AutoRepair.Controllers
             {
                 return View(_carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name).OrderBy(p => p.Model));
             }
-
         }
 
         // GET: Products/Details/5
         [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Details(int? id)
         {
-                if (id == null)
-                {
-                    return new NotFoundViewResult("CarNotFound");
-                }
+            if (id == null)
+            {
+                return new NotFoundViewResult("CarNotFound");
+            }
 
-                var car = await _carRepository.GetByIdAsync(id.Value);
-                if (car == null)
-                {
-                    return new NotFoundViewResult("CarNotFound");
-                }
+            var car = await _carRepository.GetByIdAsync(id.Value);
+            if (car == null)
+            {
+                return new NotFoundViewResult("CarNotFound");
+            }
 
-                foreach (var item in _carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name))
+            foreach (var item in _carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name))
+            {
+                if (id == item.Id)
                 {
-                    if (id == item.Id)
-                    {
-                        var model = _converterHelper.ToProductViewModel(car);
-                        return View(model);
-                    }
+                    var model = _converterHelper.ToCarsViewModel(car);
+                    return View(model);
                 }
+            }
 
-                return View(car);
+            return View(car);
         }
 
 
         //// GET: Products/Create
         [Authorize(Roles = "Admin,Customer")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+
+            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+            var model = new CarsViewModel();
+            if (user != null)
+            {
+                model.Quantity = 1;
+                model.Cars = _carRepository.GetComboCars();
+
+
+                var brand = await _modelRepository.GetBrandWithUserAsync(user.Id);
+                if (brand != null)
+                {
+                    var modelRepo = await _modelRepository.GetModelAsync(brand);
+                    if (modelRepo != null)
+                    {
+                        model.ModelId = modelRepo.Id;
+                        model.Brands = _modelRepository.GetComboBrands(modelRepo.Id);
+                        model.Models = _modelRepository.GetComboModels();
+                        model.BrandIdUser = user.Id;
+                    }
+                }
+            }
+
+            model.Brands = _modelRepository.GetComboBrands(model.ModelId);
+            model.Models = _modelRepository.GetComboModels();
+
+            return View(model);
         }
 
         // POST: Products/Create
@@ -91,18 +119,25 @@ namespace AutoRepair.Controllers
 
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Customer")]
-        public async Task<IActionResult> Create(CarsViewModel model)
+        public async Task<IActionResult> Create(CarsViewModel modelView)
         {
+
             if (ModelState.IsValid)
             {
+                var brand = await _modelRepository.GetBrandAsync(modelView.BrandId);
+                var modelRepo = await _modelRepository.GetModelAsync(brand);
 
-                var product = _converterHelper.ToProduct(model, true);
+                modelView.Model = modelRepo.Name;
+                modelView.Brand = brand.Name;
 
-                product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-                await _carRepository.CreateAsync(product);
+
+                var car = _converterHelper.ToCar(modelView, true);
+
+                car.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                await _carRepository.CreateAsync(car);
                 return RedirectToAction(nameof(Index));
             }
-            return View(model);
+            return View(modelView);
         }
 
 
@@ -128,8 +163,26 @@ namespace AutoRepair.Controllers
             {
                 if (id == item.Id)
                 {
-                    var model = _converterHelper.ToProductViewModel(car);
-                    return View(model);
+                    var model = _converterHelper.ToCarsViewModel(car);
+
+
+                    model.Quantity = 1;
+                    model.Cars = _carRepository.GetComboCars();
+
+
+                    var brand = await _modelRepository.GetBrandAsync(car.BrandId);
+                    if (brand != null)
+                    {
+                        var modelRepo = await _modelRepository.GetModelAsync(brand);
+                        if (modelRepo != null)
+                        {
+                            model.ModelId = modelRepo.Id;
+                            model.Brands = _modelRepository.GetComboBrands(modelRepo.Id);
+                            model.Models = _modelRepository.GetComboModels();
+
+                            return View(model);
+                        }
+                    }
                 }
             }
 
@@ -151,12 +204,19 @@ namespace AutoRepair.Controllers
             {
                 try
                 {
-                    var product = _converterHelper.ToProduct(model, false);
+                    var brand = await _modelRepository.GetBrandAsync(model.BrandId);
+                    var modelRepo = await _modelRepository.GetModelAsync(brand);
+
+                    model.Model = modelRepo.Name;
+                    model.Brand = brand.Name;
+
+
+                    var car = _converterHelper.ToCar(model, false);
 
 
                     //TODO: Modificar para o user que tiver logado
-                    product.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-                    await _carRepository.UpdateAsync(product);
+                    car.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                    await _carRepository.UpdateAsync(car);
 
                 }
                 catch (DbUpdateConcurrencyException)
@@ -196,7 +256,7 @@ namespace AutoRepair.Controllers
             {
                 if (id == item.Id)
                 {
-                    var model = _converterHelper.ToProductViewModel(car);
+                    var model = _converterHelper.ToCarsViewModel(car);
                     return View(model);
                 }
             }

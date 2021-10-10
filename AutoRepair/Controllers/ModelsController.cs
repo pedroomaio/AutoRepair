@@ -32,7 +32,7 @@ namespace AutoRepair.Controllers
                 return NotFound();
             }
 
-            var brand = await _modelRepository.GetBrandAsync(id);
+            var brand = await _modelRepository.GetBrandWithUserAsync(id);
             if (brand == null)
             {
                 return NotFound();
@@ -49,7 +49,7 @@ namespace AutoRepair.Controllers
                 return NotFound();
             }
 
-            var brand = await _modelRepository.GetBrandAsync(id);
+            var brand = await _modelRepository.GetBrandWithUserAsync(id);
             if (brand == null)
             {
                 return NotFound();

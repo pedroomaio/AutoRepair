@@ -1,31 +1,461 @@
-﻿@{
+﻿@model IEnumerable<AutoRepair.Data.Entities.User>
+@{
     ViewData["Title"] = "Home Page";
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <div>
-        @model IEnumerable<AutoRepair.Data.Entities.User>
+<link rel="stylesheet" href="~/Home/css/normalize.css">
+<link rel="stylesheet" href="~/Home/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/Home/css/font-awesome/css/font-awesome.min.css" />
 
-        @if (this.User.Identity.IsAuthenticated)
-        {
-            @if (Model != null)
-            {
-                @foreach (var item in Model)
-                {
+<link rel="stylesheet" href="~/Home/css/magnific-popup.css">
+<link rel="stylesheet" href="~/Home/css/slider-pro.css">
+<link rel="stylesheet" href="~/Home/css/owl.carousel.css">
+<link rel="stylesheet" href="~/Home/css/owl.theme.css">
+<link rel="stylesheet" href="~/Home/css/owl.transitions.css">
+<link rel="stylesheet" href="~/Home/css/animate.css">
+<link rel="stylesheet" href="~/Home/elegant_font/style.css">
+<link rel="stylesheet" href="~/Home/css/style.css">
 
-                    @if (!string.IsNullOrEmpty(item.ImageFullPath))
-                    {
-                        <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width:100px;height:150px;max-width:100%;height:auto;" />
-                    }
+<script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
 
 
-                }
-            }
-        }
-    </div>
-
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <a  asp-area="" asp-controller="Inspecion" asp-action="Index" class="btn btn-primary"><i class="fa fa-chevron-left"></i> Inspecion</a>
+<div class="preloader">
+    <div class="status"></div>
 </div>
 
+<header>
+    <nav class="navbar main-menu" style="background-color: #F8F8F8; height: 9%; ">
+        <div class="container">
+
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/Img/Icon.png" width="50" /></a>
+
+            </div>
+
+            <div id="nav-menu" class="navbar-collapse collapse" role="navigation">
+                <ul class="nav navbar-nav menu-wrapper display-flex-center">
+
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown text-dark">
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Employee" asp-action="index">Employees</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown text-dark">
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Customers</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">All Cars</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">All Services</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="SpecialistType" asp-action="Index">All Specialist Type</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="AutoPieces" asp-action="Index">All Auto Pieces</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Employee"))
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" asp-area="" asp-controller="" asp-action="Index">Marks</a>
+                        </li>
+                    }
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Customer"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" asp-area="" asp-controller="Cars" asp-action="Index">Your Cars</a>
+                        </li>
+                    }
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+
+                        <li class="nav-item dropdown text-dark" style=" margin-top: -4%;">
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                @if (Model != null)
+                                {
+                                    @foreach (var item in Model)
+                                    {
+
+                                        @if (!string.IsNullOrEmpty(item.ImageFullPath))
+                                        {
+                                            <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width:50px;height:50px;max-width:100%;height:auto;" />
+
+                                        }
+
+
+                                    }
+                                }
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                @*<li>
+                                        <a class="nav-link">@this.User.Identity.Name</a>
+                                    </li>*@
+                                <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="ChangeUser">Edit Profile</a></li>
+                                <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="ResetPassword">Reset Password</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item" style="margin-top: -10%; ">
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" asp-area="" asp-controller="Account" asp-action="Logout">
+                                <lord-icon src="https://cdn.lordicon.com/lywgqtim.json"
+                                           trigger="loop-on-hover"
+                                           colors="primary:#000000,secondary:#000000"
+                                           style="width:75px;height:75px">
+                                </lord-icon>
+                            </a>
+                        </li>
+
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color: black" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+</header>
+
+<section class="slider-pro slider" id="slider">
+    <div class="sp-slides" style="margin-top:4%">
+
+
+        <div class="sp-slide main-slides">
+            <div class="img-overlay"></div>
+
+            <img class="sp-image" src="~/Home/images/slider/slider-img-1.jpg" alt="Slider 1" />
+
+            <h1 class="sp-layer slider-text-big"
+                data-position="center bottom" data-show-transition="left" data-hide-transition="right" data-show-delay="1500" data-hide-delay="200">
+                <span class="highlight-texts">Fast Car Repair</span>
+            </h1>
+
+        </div>
+
+
+        <div class="sp-slide main-slides">
+            <div class="img-overlay"></div>
+            <img class="sp-image" src="~/Home/images/slider/slider-img-2.jpg" alt="Slider 2" />
+
+            <h1 class="sp-layer slider-text-big"
+                data-position="center bottom" data-show-transition="left" data-hide-transition="right" data-show-delay="1500" data-hide-delay="200">
+                <span class="highlight-texts">Best Car Service</span>
+            </h1>
+
+        </div>
+
+
+        <div class="sp-slide main-slides">
+            <div class="img-overlay"></div>
+
+            <img class="sp-image" src="~/Home/images/slider/slider-img-3.jpg" alt="Slider 3" />
+
+            <h1 class="sp-layer slider-text-big"
+                data-position="center bottom" data-show-transition="left" data-hide-transition="right" data-show-delay="1500" data-hide-delay="200">
+                <span class="highlight-texts">Lazer Car Paint</span>
+            </h1>
+
+        </div>
+
+
+    </div>
+</section>
+
+<section class="text-center" style="margin-top:4%">
+
+    <a asp-area="" asp-controller="Inspecion" asp-action="Index" class="btn btn-primary">Make your simulation now free</a>
+</section>
+
+<section id="services" style="background-color: #6C757D; margin-top: 4%" class="section-wrapper">
+    <div class="container">
+        <div class="row">
+
+
+            <div class="col-md-12 col-sm-12 col-xs-12 section-header wow fadeInDown">
+                <h2><span class="highlight-text">Services</span></h2>
+
+                <p class="col-md-8 col-sm-10 col-xs-12 col-md-offset-2 col-sm-offset-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, nam corporis quas, saepe minima error aperiam dolorum aliquam, quis deserunt eos eius quisquam odio itaque in minus distinctio dolores ipsam.</p>
+            </div>
+
+
+            <div class="our-services">
+
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".2s">
+                        <div class="service-box">
+                            <div class="icon">
+                                <i class="icon_cone"></i> <h3>Car Repair</h3>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".2s">
+                        <div class="service-box">
+                            <div class="icon">
+                                <i class="icon_mug"></i><h3>Car Wash </h3>
+                            </div>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".2s">
+                        <div class="service-box">
+                            <div class="icon">
+                                <i class="icon_currency"></i><h3>Car Checkup</h3>
+                            </div>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+
+                    <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".1s">
+                        <div class="service-box">
+                            <div class="icon">
+                                <i class="icon_star-half_alt"></i><h3>Mobile Service</h3>
+                            </div>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".1s">
+                        <div class="service-box">
+                            <div class="icon">
+                                <i class="icon_music"></i><h3>Car Painting</h3>
+                            </div>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".1s">
+                        <div class="service-box">
+                            <div class="icon">
+                                <i class="icon_cog"></i><h3>Car Sales</h3>
+                            </div>
+
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="pricing" class="pricing-section">
+    <div class="container">
+        <div class="row">
+
+
+            <div class="col-md-12 col-sm-12 col-xs-12 section-header wow fadeInDown">
+                <h2><span class="highlight-text">Pricing</span></h2>
+
+                <p class="col-md-8 col-sm-10 col-xs-12 col-md-offset-2 col-sm-offset-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, nam corporis quas, saepe minima error aperiam dolorum aliquam, quis deserunt eos eius quisquam odio itaque in minus distinctio dolores ipsam.</p>
+            </div>
+
+
+            <div class="pricing-wrapper">
+
+
+                <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow bounceInLeft hoverer">
+                    <div class="pricing-titles">
+                        <h2>Bronze</h2>
+                        <p><span>$16/</span></p>
+                    </div>
+                    <div class="pricing-service-name">
+                        <ul>
+                            <li>Car Checkup</li>
+                            <li>Responsive</li>
+                            <li>3 Years Hosting</li>
+                            <li>100 GB Data</li>
+                            <li>Unlimited Bandwidth</li>
+                            <li>24/7 Support</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-btn">
+                        <a asp-action="Index" asp-controller="Inspecion" asp-route-id="1" class="btn btn-warning">Get Now</a>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow fadeInUp hoverer" data-wow-duration="1s">
+                    <div class="pricing-titles">
+                        <h2>Gold</h2>
+                        <p><span>$69/</span></p>
+                    </div>
+                    <div class="pricing-service-name">
+                        <ul>
+                            <li>Car Wash</li>
+                            <li>Responsive</li>
+                            <li>3 Years Hosting</li>
+                            <li>100 GB Data</li>
+                            <li>Unlimited Bandwidth</li>
+                            <li>24/7 Support</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-btn">
+                        <a asp-action="Index" asp-controller="Inspecion" asp-route-id="2" class="btn btn-warning">Get Now</a>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow bounceInRight hoverer">
+                    <div class="pricing-titles">
+                        <h2>Platinum</h2>
+                        <p><span>$99/</span></p>
+                    </div>
+                    <div class="pricing-service-name">
+                        <ul>
+                            <li>Car Repair</li>
+                            <li>Responsive</li>
+                            <li>3 Years Hosting</li>
+                            <li>100 GB Data</li>
+                            <li>Unlimited Bandwidth</li>
+                            <li>24/7 Support</li>
+                        </ul>
+                    </div>
+                    <div class="bg-btn">
+                        <a asp-action="Index" asp-controller="Inspecion" asp-route-id="3" class="btn">Get Now</a>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</section>
+<section class="footer-container" style="background-color: #6C757D ">
+    <div class="container">
+        <div class="row footer-containertent">
+            <div class="col-md-4">
+
+                <img src="~/Img/Icon.png" width="50" alt="">
+                <br />
+                <br />
+                <p>We are a new AutoRepair that with our products we always try to fund a solution to your problems every day.</p>
+
+                <hr />
+            </div>
+
+            <div class="col-md-4 contac-us">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fa fa-phone"></i>001 123 12345 99</li>
+                    <li><i class="fa fa-envelope-o"></i>repairnauto@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer style="background-color: #6C757D">
+
+    <div class="container">
+        <div class="row">
+            <div class="footer-containertent">
+
+
+                <br /><br />
+                <p>Copyright © 2021      -      AutoRepair      -      Pedro Maio</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!--<section id="contact" class="section-wrapper contact-section" data-stellar-background-ratio="0.5">
+    <div class="parallax-overlay"></div>
+    <div class="container">
+        <div class="row">-->
+<!-- Section Header -->
+<!--<div class="col-md-12 col-sm-12 col-xs-12 section-header wow fadeInDown section-header-parallax">
+    <h2><span class="highlight-text">Contact Us</span></h2>
+    <p class="col-md-8 col-sm-10 col-xs-12 col-md-offset-2 col-sm-offset-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, nam corporis quas, saepe minima error aperiam dolorum aliquam, quis deserunt eos eius quisquam odio itaque in minus distinctio dolores ipsam.</p>
+</div>-->
+<!-- Section Header End -->
+<!--<div class="contact-details">-->
+<!-- Contact Form -->
+<!--<div class="col-sm-offset-3 col-md-6 col-sm-6 col-xs-12 contact-form wow bounceInRight">-->
+<!--NOTE: Update your email Id in "contact_me.php" file in order to receive emails from your contact form-->
+<!--<form name="sentMessage" id="contactForm" novalidate>
+    <div class="control-group">
+        <div class="controls">
+            <input type="text" class="form-control"
+                   placeholder="Full Name" id="name" required
+                   data-validation-required-message="Please enter your name" />
+            <p class="help-block"></p>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <input type="email" class="form-control" placeholder="Email"
+                   id="email" required
+                   data-validation-required-message="Please enter your email" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <textarea rows="10" cols="100" class="form-control"
+                      placeholder="Message" id="message" required
+                      data-validation-required-message="Please enter your message" minlength="5"
+                      data-validation-minlength-message="Min 5 characters"
+                      maxlength="999" style="resize:none"></textarea>
+        </div>
+    </div>
+    <div id="success"> </div>-->
+<!-- For success/fail messages -->
+<!--<div class="text-center"><button type="submit" class="btn btn-primary">Submit Message</button></div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>-->
+
+<script src="~/Home/js/jquery-1.11.3.min.js"></script>
+<script src="~/Home/js/bootstrap.min.js"></script>
+<script src="~/Home/js/modernizr.min.js"></script>
+<script src="~/Home/js/jquery.easing.1.3.js"></script>
+<script src="~/Home/js/jquery.scrollUp.min.js"></script>
+<script src="~/Home/js/jquery.easypiechart.js"></script>
+<script src="~/Home/js/isotope.pkgd.min.js"></script>
+<script src="~/Home/js/jquery.fitvids.js"></script>
+<script src="~/Home/js/jquery.stellar.min.js"></script>
+<script src="~/Home/js/jquery.waypoints.min.js"></script>
+<script src="~/Home/js/wow.min.js"></script>
+<script src="~/Home/js/jquery.nav.js"></script>
+<script src="~/Home/js/imagesloaded.pkgd.min.js"></script>
+<script src="~/Home/js/smooth-scroll.min.js"></script>
+<script src="~/Home/js/jquery.magnific-popup.min.js"></script>
+<script src="~/Home/js/jquery.sliderPro.min.js"></script>
+<script src="~/Home/js/owl.carousel.min.js"></script>
+<script src="~/Home/contact/jqBootstrapValidation.js"></script>
+<script src="~/Home/contact/contact_me.js"></script>
+<script src="http://maps.googleapis.com/maps/api/js">
+</script>
+
+
+<script src="~/Home/js/custom.js"></script>

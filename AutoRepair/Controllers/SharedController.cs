@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using AutoRepair.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,15 +14,10 @@ namespace AutoRepair.Controllers
         {
             _userRepository = userRepository;
         }
-        public IActionResult Index()
+        public IActionResult _ViewShared()
         {
-   var a = _userRepository.GetAll();
-            return View();
-        }
-        public IActionResult UserImage()
-        {
-            var a = _userRepository.GetAll();
-            return View();
+            return View(_userRepository.GetAll().Where(p => p.Email == User.Identity.Name));
+
         }
     }
 }

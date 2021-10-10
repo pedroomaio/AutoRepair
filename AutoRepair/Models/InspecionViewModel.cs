@@ -26,6 +26,7 @@ namespace AutoRepair.Models
 
         public IEnumerable<SelectListItem> Brands { get; set; }
 
+        int? Section { get; set; }
 
         [Display(Name = "Model")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a model.")]
