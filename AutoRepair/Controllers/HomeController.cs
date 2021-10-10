@@ -1,8 +1,10 @@
 ﻿using AutoRepair.Data;
+using AutoRepair.Data.Entities;
 using AutoRepair.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AutoRepair.Controllers
 {
@@ -23,10 +25,9 @@ namespace AutoRepair.Controllers
         {
             _userRepository = userRepository;
         }
-        public IActionResult Index()
+       public IActionResult Index()
         {
-            var a = _userRepository.GetAll();
-            return View(a);
+            return View(_userRepository.GetAll().Where(p => p.Email == User.Identity.Name));
         }
         public IActionResult Jornal(int a1, int a2)
         {

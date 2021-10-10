@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutoRepair.Data.Entities
 {
@@ -11,5 +12,7 @@ namespace AutoRepair.Data.Entities
         [Display(Name = "Brand")]
         [MaxLength(50, ErrorMessage = "The field {0} can contain {1} characters.")]
         public string Name { get; set; }
+        public string UserId { get; set; }
+        public ICollection<User> Users{ get; set; }
     }
 }

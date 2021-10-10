@@ -25,14 +25,14 @@ namespace AutoRepair.Controllers
             _flashMessage = flashMessage;
         }
 
-        public async Task<IActionResult> DeleteBrand(int? id)
+        public async Task<IActionResult> DeleteBrand(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var brand = await _modelRepository.GetBrandAsync(id.Value);
+            var brand = await _modelRepository.GetBrandAsync(id);
             if (brand == null)
             {
                 return NotFound();
@@ -42,14 +42,14 @@ namespace AutoRepair.Controllers
             return this.RedirectToAction($"Details", new { id = countryId });
         }
 
-        public async Task<IActionResult> EditBrand(int? id)
+        public async Task<IActionResult> EditBrand(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var brand = await _modelRepository.GetBrandAsync(id.Value);
+            var brand = await _modelRepository.GetBrandAsync(id);
             if (brand == null)
             {
                 return NotFound();

@@ -120,8 +120,6 @@ namespace AutoRepair.Controllers
                         ImageId = imageId
                     };
 
-
-
                     var result = await _userHelper.AddUserAsync(user, model.Password);
                     if (result != IdentityResult.Success)
                     {

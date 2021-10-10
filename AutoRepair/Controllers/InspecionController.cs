@@ -34,7 +34,7 @@ namespace AutoRepair.Controllers
                 model.Cars = _carRepository.GetComboCars();
 
 
-                var brand = await _modelRepository.GetBrandAsync(user.BrandId);
+                var brand = await _modelRepository.GetBrandAsync(user.Id);
                 if (brand != null)
                 {
                     var modelRepo = await _modelRepository.GetModelAsync(brand);
@@ -43,7 +43,7 @@ namespace AutoRepair.Controllers
                         model.ModelId = modelRepo.Id;
                         model.Brands = _modelRepository.GetComboBrands(modelRepo.Id);
                         model.Models = _modelRepository.GetComboModels();
-                        model.BrandId = user.BrandId;
+                        model.BrandId = user.Id;
                     }
                 }
             }

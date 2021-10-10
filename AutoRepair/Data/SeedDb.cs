@@ -28,21 +28,7 @@ namespace AutoRepair.Data
             await _userHelper.CheckRoleAsync("Customer");
             await _userHelper.CheckRoleAsync("Employee");
 
-            if (!_context.Models.Any())
-            {
-                var brands = new List<Brand>();
-                brands.Add(new Brand { Name = "500" });
-                brands.Add(new Brand { Name = "Panda" });
-                brands.Add(new Brand { Name = "Punto" });
 
-                _context.Models.Add(new Model
-                {
-                    brands = brands,
-                    Name = "Fiat"
-                });
-
-                await _context.SaveChangesAsync();
-            }
 
             var user = await _userHelper.GetUserByEmailAsync("repairnauto@gmail.com");
 
@@ -56,9 +42,9 @@ namespace AutoRepair.Data
                     UserName = "repairnauto@gmail.com",
                     PhoneNumber = "123456789",
                     Address = "Rua Salmão Real 123 nº6",
-                    AgreeTerm = true,
-                    BrandId = _context.Models.FirstOrDefault().brands.FirstOrDefault().Id,
-                    Brand = _context.Models.FirstOrDefault().brands.FirstOrDefault()
+                    AgreeTerm = true
+                    //BrandId = _context.Models.FirstOrDefault().brands.FirstOrDefault().Id,
+                    //Brand = _context.Models.FirstOrDefault().brands.FirstOrDefault()
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "123456");
@@ -70,7 +56,24 @@ namespace AutoRepair.Data
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
                 var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                 await _userHelper.ConfirmEmailAsync(user, token);
+
+                if (!_context.Models.Any())
+                {
+                    var brands = new List<Brand>();
+                    brands.Add(new Brand { Name = "500", UserId = user.Id });
+                    brands.Add(new Brand { Name = "Panda", UserId = user.Id });
+                    brands.Add(new Brand { Name = "Punto", UserId = user.Id });
+
+                    _context.Models.Add(new Model
+                    {
+                        brands = brands,
+                        Name = "Fiat"
+                    });
+
+                    await _context.SaveChangesAsync();
+                }
             }
+
 
             var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
             if (!isInRole)

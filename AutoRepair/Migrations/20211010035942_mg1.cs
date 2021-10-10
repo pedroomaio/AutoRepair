@@ -101,6 +101,7 @@ namespace AutoRepair.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ModelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -149,7 +150,7 @@ namespace AutoRepair.Migrations
                     IdAmin = table.Column<bool>(type: "bit", nullable: false),
                     IdClient = table.Column<bool>(type: "bit", nullable: false),
                     IdEmployee = table.Column<bool>(type: "bit", nullable: false),
-                    BrandId = table.Column<int>(type: "int", nullable: false),
+                    BrandId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -173,7 +174,7 @@ namespace AutoRepair.Migrations
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

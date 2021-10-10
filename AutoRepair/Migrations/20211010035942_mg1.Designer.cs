@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoRepair.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211009205014_mg1")]
+    [Migration("20211010035942_mg1")]
     partial class mg1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,9 @@ namespace AutoRepair.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -273,7 +276,7 @@ namespace AutoRepair.Migrations
                     b.Property<bool>("AgreeTerm")
                         .HasColumnType("bit");
 
-                    b.Property<int>("BrandId")
+                    b.Property<int?>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -572,13 +575,9 @@ namespace AutoRepair.Migrations
 
             modelBuilder.Entity("AutoRepair.Data.Entities.User", b =>
                 {
-                    b.HasOne("AutoRepair.Data.Entities.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
+                    b.HasOne("AutoRepair.Data.Entities.Brand", null)
+                        .WithMany("Users")
+                        .HasForeignKey("BrandId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -630,6 +629,11 @@ namespace AutoRepair.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AutoRepair.Data.Entities.Brand", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("AutoRepair.Data.Entities.Model", b =>

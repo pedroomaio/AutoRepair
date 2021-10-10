@@ -21,7 +21,7 @@ namespace AutoRepair.Models
 
         [Display(Name = "Brand")]
         [Range(1, int.MaxValue, ErrorMessage = "You must select a brand.")]
-        public int BrandId { get; set; }
+        public string BrandId { get; set; }
 
 
         public IEnumerable<SelectListItem> Brands { get; set; }

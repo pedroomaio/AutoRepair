@@ -16,7 +16,7 @@ namespace AutoRepair.Data
 
         Task<Model> GetModelsWithBrandsAsync(int id);
 
-        Task<Brand> GetBrandAsync(int id);
+        Task<Brand> GetBrandAsync(string id);
 
         Task<int> UpdateBrandAsync(Brand brand);
         IEnumerable<SelectListItem> GetComboModels();

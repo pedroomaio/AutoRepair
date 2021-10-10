@@ -27,8 +27,7 @@ namespace AutoRepair.Data.Entities
         public bool IdAmin { get; set; }
         public bool IdClient { get; set; }
         public bool IdEmployee { get; set; }
-        public int BrandId { get; set; }
-        public Brand Brand { get; set; }
+
         public string ImageFullPath => ImageId == Guid.Empty
            ? $"https://autorepairtpsi.azurewebsites.net/Img/noimage.png"
            : $"https://autorepairtpsi.blob.core.windows.net/users/{ImageId}";
