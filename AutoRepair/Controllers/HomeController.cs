@@ -1,4 +1,5 @@
-﻿using AutoRepair.Models;
+﻿using AutoRepair.Data;
+using AutoRepair.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -9,14 +10,23 @@ namespace AutoRepair.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        //public HomeController(ILogger<HomeController> logger)
+        //{
+        //    _logger = logger;
+        //}
 
+        private readonly IUserRepository _userRepository;
+
+        public HomeController(
+            IUserRepository userRepository)
+
+        {
+            _userRepository = userRepository;
+        }
         public IActionResult Index()
         {
-            return View();
+            var a = _userRepository.GetAll();
+            return View(a);
         }
         public IActionResult Jornal(int a1, int a2)
         {

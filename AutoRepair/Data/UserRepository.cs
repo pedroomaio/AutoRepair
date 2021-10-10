@@ -18,11 +18,12 @@ namespace AutoRepair.Data
         }
         public List<User> GetAllUser()
         {
-            //var list = _context.Users.Select(p => new SelectListItem
-            //{
-            //    Text = p.UserName,
-            //    Value = p.Id.ToString()
-            //}).ToList();
+            var list = _context.Users.Select(p => new SelectListItem
+            {
+                Text = p.UserName,
+                Value = p.Id.ToString()
+            }).ToList();
+
 
             var model = new List<User>();
 
@@ -33,10 +34,16 @@ namespace AutoRepair.Data
                     FirstName = item.FullName,
                     Email = item.Email,
                     EmailConfirmed = item.EmailConfirmed
+
                 });
             }
 
             return model;
+
+        }
+        public IQueryable<User> GetAll()
+        {
+            return _context.Users.AsNoTracking();
         }
         public async Task<User> GetByIdAsync(string id)
         {

@@ -14,7 +14,7 @@ namespace AutoRepair.Helpers
             return new Car
             {
                 Id = isNew ? 0 : model.Id,
-                Modelo = model.Modelo,
+                Model = model.Model,
                 Colour = model.Colour,
                 User = model.User
             };
@@ -25,7 +25,7 @@ namespace AutoRepair.Helpers
             return new CarsViewModel
             {
                 Id = Cars.Id,
-                Modelo = Cars.Modelo,
+                Model = Cars.Model,
                 Colour = Cars.Colour,
                 User = Cars.User
             };

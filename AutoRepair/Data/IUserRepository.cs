@@ -12,7 +12,7 @@ namespace AutoRepair.Data
         List<User> GetAllUser();
         Task<User> GetByIdAsync(string id);
 
-
+        IQueryable<User> GetAll();
         Task CreateAsync(User entity);
 
 

@@ -4,6 +4,28 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
+    <div>
+        @model IEnumerable<AutoRepair.Data.Entities.User>
+
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+
+                    @if (!string.IsNullOrEmpty(item.ImageFullPath))
+                    {
+                        <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width:100px;height:150px;max-width:100%;height:auto;" />
+                    }
+
+
+                }
+            }
+        }
+    </div>
+
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <a  asp-area="" asp-controller="Inspecion" asp-action="Index" class="btn btn-primary"><i class="fa fa-chevron-left"></i> Inspecion</a>
 </div>
 

@@ -28,8 +28,24 @@ namespace AutoRepair.Data
             await _userHelper.CheckRoleAsync("Customer");
             await _userHelper.CheckRoleAsync("Employee");
 
+            if (!_context.Models.Any())
+            {
+                var brands = new List<Brand>();
+                brands.Add(new Brand { Name = "500" });
+                brands.Add(new Brand { Name = "Panda" });
+                brands.Add(new Brand { Name = "Punto" });
+
+                _context.Models.Add(new Model
+                {
+                    brands = brands,
+                    Name = "Fiat"
+                });
+
+                await _context.SaveChangesAsync();
+            }
 
             var user = await _userHelper.GetUserByEmailAsync("repairnauto@gmail.com");
+
             if (user == null)
             {
                 user = new User
@@ -40,7 +56,9 @@ namespace AutoRepair.Data
                     UserName = "repairnauto@gmail.com",
                     PhoneNumber = "123456789",
                     Address = "Rua Salmão Real 123 nº6",
-                    AgreeTerm=true
+                    AgreeTerm = true,
+                    BrandId = _context.Models.FirstOrDefault().brands.FirstOrDefault().Id,
+                    Brand = _context.Models.FirstOrDefault().brands.FirstOrDefault()
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "123456");
@@ -61,6 +79,6 @@ namespace AutoRepair.Data
             }
 
         }
-      
+
     }
 }

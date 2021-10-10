@@ -74,6 +74,8 @@ namespace AutoRepair
             services.AddScoped<IMechanicRepository, MechanicRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IConverterUserHelper, ConverterUserHelper>();
+            services.AddScoped<IBlobHelper, BlobHelper>();
+            services.AddScoped<IModelRepository, ModelRepository>();
 
 
             services.AddScoped<IMailHelper, MailHelper>();

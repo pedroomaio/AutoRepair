@@ -22,7 +22,11 @@ namespace AutoRepair.Helpers
         public async Task<Guid> UploadBlobAsync(IFormFile file, string containerName)
         {
             Stream stream = file.OpenReadStream();
-            return await UploadStreamAsync(stream, containerName);
+            
+                
+                var a =await UploadStreamAsync(stream, containerName);
+
+            return a;
         }
 
         public async Task<Guid> UploadBlobAsync(byte[] file, string containerName)

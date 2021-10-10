@@ -40,11 +40,11 @@ namespace AutoRepair.Controllers
 
             if (User.IsInRole("Admin"))
             {
-                return View(_carRepository.GetAll().OrderBy(p => p.Modelo));
+                return View(_carRepository.GetAll().OrderBy(p => p.Model));
             }
             else
             {
-                return View(_carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name).OrderBy(p => p.Modelo));
+                return View(_carRepository.GetAll().Where(p => p.User.Email == User.Identity.Name).OrderBy(p => p.Model));
             }
 
         }
@@ -223,8 +223,8 @@ namespace AutoRepair.Controllers
 
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
-                    ViewBag.ErrorTitle = $"{product.Modelo} provavelmente está a ser usado!!";
-                    ViewBag.ErrorMessage = $"{product.Modelo} não pode ser apagado visto haverem encomendas que o usam.</br></br>" +
+                    ViewBag.ErrorTitle = $"{product.Model} provavelmente está a ser usado!!";
+                    ViewBag.ErrorMessage = $"{product.Model} não pode ser apagado visto haverem encomendas que o usam.</br></br>" +
                         $"Experimente primeiro apagar todas as encomendas que o estão a usar," +
                         $"e torne novamente a apagá-lo";
                 }

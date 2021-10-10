@@ -29,7 +29,7 @@ namespace AutoRepair.Data
 
             var list = _context.Cars.Select(p => new SelectListItem
             {
-                Text = p.Colour,
+                Text = p.Model,
                 Value = p.Id.ToString()
             }).ToList();
 

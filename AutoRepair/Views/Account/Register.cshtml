@@ -4,16 +4,35 @@
     Layout = null;
 }
 
-<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<!--<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <link rel="stylesheet" href="~/css/site.css" />
-<link rel="stylesheet" href="~/Account/fonts/material-icon/css/material-design-iconic-font.min.css">
-
+<link rel="stylesheet" href="~/Account/fonts/material-icon/css/material-design-iconic-font.min.css">-->
 <!-- Main css -->
-<link rel="stylesheet" href="~/Account/css/style.css">
+<!--<link rel="stylesheet" href="~/Account/css/style.css">
 <script src="~/Account/vendor/jquery/jquery.min.js"></script>
-<script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
+<script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>-->
 
 
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" class="form-control" type="file" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Create</button>
+                <a asp-action="Index" class="btn btn-success"><i class="fa fa-chevron-left"></i> Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
 <!-- Sign up form -->
 <section class="signup">
     <div class="container" style=" margin-top: 2%;">
@@ -32,15 +51,7 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                         Launch demo modal
                     </button>
-                    <div class="form-group">
-                        <div class="image-upload">
-                            <label asp-for="ImageFile" class="control-label"></label>
-                            <input asp-for="ImageFile" class="form-control" type="file" />
-                            <span asp-validation-for="ImageFile" class="text-danger"></span>
 
-                            <input id="file-input" type="file" />
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label asp-for="FirstName" for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
                         <input asp-for="FirstName" type="text" id="name" placeholder="First Name" />
@@ -97,24 +108,22 @@
 </section>
 
 
-@*<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Failed</h5>
-                </div>
-                <div class="modal-body">
-                    <div asp-validation-summary="ModelOnly"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Failed</h5>
+            </div>
+            <div class="modal-body">
+                <div asp-validation-summary="ModelOnly"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
-    </div>*@
-<button type="button" class="btn" title="Informação importante" data-toggle="modal" data-target="#termServiceModal">
-    asdasdas
-</button>
+    </div>
+</div>
+
 
 <div class="modal fade" id="termsServiceModal" role="dialog">
     <div class="modal-dialog" role="document">
@@ -198,7 +207,9 @@
 
     }
 </script>
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+@*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>*@

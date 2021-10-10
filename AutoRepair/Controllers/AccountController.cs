@@ -1,6 +1,8 @@
-﻿using AutoRepair.Data.Entities;
+﻿using AutoRepair.Data;
+using AutoRepair.Data.Entities;
 using AutoRepair.Helpers;
 using AutoRepair.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -20,19 +22,23 @@ namespace AutoRepair.Controllers
         private readonly IMailHelper _mailHelper;
         private readonly IConfiguration _configuration;
         private readonly IBlobHelper _blobHelper;
+        private readonly IUserRepository _userRepository;
+
         //private readonly ICountryRepository _countryRepository;
 
         public AccountController(
             IUserHelper userHelper,
             IMailHelper mailHelper,
             IConfiguration configuration,
-            IBlobHelper blobHelper)
+            IBlobHelper blobHelper,
+            IUserRepository userRepository)
         //ICountryRepository countryRepository)
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _configuration = configuration;
             _blobHelper = blobHelper;
+            _userRepository = userRepository;
             //_countryRepository = countryRepository;
         }
 
@@ -86,6 +92,7 @@ namespace AutoRepair.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
             if (ModelState.IsValid)
@@ -93,13 +100,13 @@ namespace AutoRepair.Controllers
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
                 if (user == null)
                 {
-                    //Guid imageId = Guid.Empty;
+                    Guid imageId = Guid.Empty;
 
-                    //if (model.ImageFile != null && model.ImageFile.Length > 0)
-                    //{
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
 
-                    //    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "products");
-                    //}
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                    }
 
                     user = new User
                     {
@@ -109,7 +116,8 @@ namespace AutoRepair.Controllers
                         UserName = model.Username,
                         Address = model.Address,
                         PhoneNumber = model.PhoneNumber,
-                        AgreeTerm = model.AgreeTerm
+                        AgreeTerm = model.AgreeTerm,
+                        ImageId = imageId
                     };
 
 
