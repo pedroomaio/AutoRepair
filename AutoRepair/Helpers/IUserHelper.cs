@@ -1,6 +1,7 @@
 ﻿using AutoRepair.Data.Entities;
 using AutoRepair.Models;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace AutoRepair.Helpers
 {
     public interface IUserHelper
     {
+        User ToUser(UsersViewModel model, Guid imageId);
         Task<User> GetUserByEmailAsync(string email);
 
         Task<IdentityResult> AddUserAsync(User user, string password);

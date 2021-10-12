@@ -22,19 +22,6 @@ namespace AutoRepair.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AutoPieces",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AutoPieceName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AutoPieces", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Models",
                 columns: table => new
                 {
@@ -53,24 +40,12 @@ namespace AutoRepair.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ServiceName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ServiceName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Services", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SpecialistTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SpecialistTypeName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SpecialistTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -116,34 +91,13 @@ namespace AutoRepair.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Mechanics",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rank = table.Column<int>(type: "int", nullable: false),
-                    SpecialistId = table.Column<int>(type: "int", nullable: false),
-                    SpecialistTypeId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Mechanics", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Mechanics_SpecialistTypes_SpecialistTypeId",
-                        column: x => x.SpecialistTypeId,
-                        principalTable: "SpecialistTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    IsMechanic = table.Column<bool>(type: "bit", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     AgreeTerm = table.Column<bool>(type: "bit", nullable: false),
                     ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -270,6 +224,7 @@ namespace AutoRepair.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     Brand = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
                     ModelId = table.Column<int>(type: "int", nullable: false),
                     Model = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RegisterCar = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -289,96 +244,91 @@ namespace AutoRepair.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Repairs",
+                name: "Inspecions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PreferDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PreferHours = table.Column<double>(type: "float", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    AutoPieceId = table.Column<int>(type: "int", nullable: false),
-                    CarId = table.Column<int>(type: "int", nullable: false),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Repairs", x => x.Id);
+                    table.PrimaryKey("PK_Inspecions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Repairs_AspNetUsers_UserId",
+                        name: "FK_Inspecions_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Repairs_AutoPieces_AutoPieceId",
-                        column: x => x.AutoPieceId,
-                        principalTable: "AutoPieces",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Repairs_Cars_CarId",
-                        column: x => x.CarId,
-                        principalTable: "Cars",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Repairs_Services_ServiceId",
+                        name: "FK_Inspecions_Services_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Services",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Invoicings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MyProperty = table.Column<int>(type: "int", nullable: false),
-                    RepaiId = table.Column<int>(type: "int", nullable: false),
-                    RepairId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Invoicings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Invoicings_Repairs_RepairId",
-                        column: x => x.RepairId,
-                        principalTable: "Repairs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Marks",
+                name: "InspecionDetailTemps",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RepairStatus = table.Column<bool>(type: "bit", nullable: false),
-                    RepairId = table.Column<int>(type: "int", nullable: false),
-                    MechanicId = table.Column<int>(type: "int", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CarId = table.Column<int>(type: "int", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Marks", x => x.Id);
+                    table.PrimaryKey("PK_InspecionDetailTemps", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Marks_Mechanics_MechanicId",
-                        column: x => x.MechanicId,
-                        principalTable: "Mechanics",
+                        name: "FK_InspecionDetailTemps_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Marks_Repairs_RepairId",
-                        column: x => x.RepairId,
-                        principalTable: "Repairs",
+                        name: "FK_InspecionDetailTemps_Cars_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Cars",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InspecionDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarId = table.Column<int>(type: "int", nullable: true),
+                    EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExitDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InspesioStatus = table.Column<bool>(type: "bit", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<double>(type: "float", nullable: false),
+                    InspecionId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InspecionDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InspecionDetails_Cars_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Cars",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_InspecionDetails_Inspecions_InspecionId",
+                        column: x => x.InspecionId,
+                        principalTable: "Inspecions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -436,43 +386,33 @@ namespace AutoRepair.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invoicings_RepairId",
-                table: "Invoicings",
-                column: "RepairId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Marks_MechanicId",
-                table: "Marks",
-                column: "MechanicId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Marks_RepairId",
-                table: "Marks",
-                column: "RepairId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Mechanics_SpecialistTypeId",
-                table: "Mechanics",
-                column: "SpecialistTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Repairs_AutoPieceId",
-                table: "Repairs",
-                column: "AutoPieceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Repairs_CarId",
-                table: "Repairs",
+                name: "IX_InspecionDetails_CarId",
+                table: "InspecionDetails",
                 column: "CarId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Repairs_ServiceId",
-                table: "Repairs",
+                name: "IX_InspecionDetails_InspecionId",
+                table: "InspecionDetails",
+                column: "InspecionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InspecionDetailTemps_CarId",
+                table: "InspecionDetailTemps",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InspecionDetailTemps_UserId",
+                table: "InspecionDetailTemps",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inspecions_ServiceId",
+                table: "Inspecions",
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Repairs_UserId",
-                table: "Repairs",
+                name: "IX_Inspecions_UserId",
+                table: "Inspecions",
                 column: "UserId");
         }
 
@@ -494,25 +434,16 @@ namespace AutoRepair.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Invoicings");
+                name: "InspecionDetails");
 
             migrationBuilder.DropTable(
-                name: "Marks");
+                name: "InspecionDetailTemps");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Mechanics");
-
-            migrationBuilder.DropTable(
-                name: "Repairs");
-
-            migrationBuilder.DropTable(
-                name: "SpecialistTypes");
-
-            migrationBuilder.DropTable(
-                name: "AutoPieces");
+                name: "Inspecions");
 
             migrationBuilder.DropTable(
                 name: "Cars");

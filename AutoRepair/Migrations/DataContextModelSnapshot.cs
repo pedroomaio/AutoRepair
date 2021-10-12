@@ -19,21 +19,6 @@ namespace AutoRepair.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("AutoRepair.Data.Entities.AutoPiece", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AutoPieceName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AutoPieces");
-                });
-
             modelBuilder.Entity("AutoRepair.Data.Entities.Brand", b =>
                 {
                     b.Property<int>("Id")
@@ -75,6 +60,9 @@ namespace AutoRepair.Migrations
                     b.Property<string>("Colour")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Model")
                         .HasColumnType("nvarchar(max)");
 
@@ -97,35 +85,76 @@ namespace AutoRepair.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("AutoRepair.Data.Entities.Invoicing", b =>
+            modelBuilder.Entity("AutoRepair.Data.Entities.Inspecion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("MyProperty")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RepaiId")
+                    b.Property<DateTime?>("PreferDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<double?>("PreferHours")
+                        .IsRequired()
+                        .HasColumnType("float");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RepairId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RepairId");
+                    b.HasIndex("ServiceId");
 
-                    b.ToTable("Invoicings");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Inspecions");
                 });
 
-            modelBuilder.Entity("AutoRepair.Data.Entities.Mark", b =>
+            modelBuilder.Entity("AutoRepair.Data.Entities.InspecionDetailTemp", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("InspecionDetailTemps");
+                });
+
+            modelBuilder.Entity("AutoRepair.Data.Entities.InspecionDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CarId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("EntryDate")
                         .HasColumnType("datetime2");
@@ -133,51 +162,25 @@ namespace AutoRepair.Migrations
                     b.Property<DateTime>("ExitDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MechanicId")
+                    b.Property<int?>("InspecionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RepairId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("RepairStatus")
+                    b.Property<bool>("InspesioStatus")
                         .HasColumnType("bit");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MechanicId");
+                    b.HasIndex("CarId");
 
-                    b.HasIndex("RepairId");
+                    b.HasIndex("InspecionId");
 
-                    b.ToTable("Marks");
-                });
-
-            modelBuilder.Entity("AutoRepair.Data.Entities.Mechanic", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SpecialistId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SpecialistTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpecialistTypeId");
-
-                    b.ToTable("Mechanics");
+                    b.ToTable("InspecionDetails");
                 });
 
             modelBuilder.Entity("AutoRepair.Data.Entities.Model", b =>
@@ -197,44 +200,6 @@ namespace AutoRepair.Migrations
                     b.ToTable("Models");
                 });
 
-            modelBuilder.Entity("AutoRepair.Data.Entities.Repair", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AutoPieceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AutoPieceId");
-
-                    b.HasIndex("CarId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Repairs");
-                });
-
             modelBuilder.Entity("AutoRepair.Data.Entities.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -242,27 +207,15 @@ namespace AutoRepair.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ServiceName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Services");
-                });
-
-            modelBuilder.Entity("AutoRepair.Data.Entities.SpecialistType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("SpecialistTypeName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SpecialistTypes");
                 });
 
             modelBuilder.Entity("AutoRepair.Data.Entities.User", b =>
@@ -309,6 +262,9 @@ namespace AutoRepair.Migrations
 
                     b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsMechanic")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50)
@@ -509,72 +465,49 @@ namespace AutoRepair.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AutoRepair.Data.Entities.Invoicing", b =>
+            modelBuilder.Entity("AutoRepair.Data.Entities.Inspecion", b =>
                 {
-                    b.HasOne("AutoRepair.Data.Entities.Repair", "Repair")
-                        .WithMany()
-                        .HasForeignKey("RepairId");
-
-                    b.Navigation("Repair");
-                });
-
-            modelBuilder.Entity("AutoRepair.Data.Entities.Mark", b =>
-                {
-                    b.HasOne("AutoRepair.Data.Entities.Mechanic", "Mechanic")
-                        .WithMany()
-                        .HasForeignKey("MechanicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AutoRepair.Data.Entities.Repair", "Repair")
-                        .WithMany()
-                        .HasForeignKey("RepairId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Mechanic");
-
-                    b.Navigation("Repair");
-                });
-
-            modelBuilder.Entity("AutoRepair.Data.Entities.Mechanic", b =>
-                {
-                    b.HasOne("AutoRepair.Data.Entities.SpecialistType", null)
-                        .WithMany("Mechanics")
-                        .HasForeignKey("SpecialistTypeId");
-                });
-
-            modelBuilder.Entity("AutoRepair.Data.Entities.Repair", b =>
-                {
-                    b.HasOne("AutoRepair.Data.Entities.AutoPiece", "AutoPiece")
-                        .WithMany()
-                        .HasForeignKey("AutoPieceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AutoRepair.Data.Entities.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AutoRepair.Data.Entities.Service", "Service")
                         .WithMany()
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AutoRepair.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.Navigation("AutoPiece");
-
-                    b.Navigation("Car");
-
                     b.Navigation("Service");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AutoRepair.Data.Entities.InspecionDetailTemp", b =>
+                {
+                    b.HasOne("AutoRepair.Data.Entities.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId");
+
+                    b.HasOne("AutoRepair.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Car");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AutoRepair.Data.Entities.InspecionDetails", b =>
+                {
+                    b.HasOne("AutoRepair.Data.Entities.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId");
+
+                    b.HasOne("AutoRepair.Data.Entities.Inspecion", null)
+                        .WithMany("Items")
+                        .HasForeignKey("InspecionId");
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("AutoRepair.Data.Entities.User", b =>
@@ -640,14 +573,14 @@ namespace AutoRepair.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("AutoRepair.Data.Entities.Inspecion", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("AutoRepair.Data.Entities.Model", b =>
                 {
                     b.Navigation("brands");
-                });
-
-            modelBuilder.Entity("AutoRepair.Data.Entities.SpecialistType", b =>
-                {
-                    b.Navigation("Mechanics");
                 });
 #pragma warning restore 612, 618
         }

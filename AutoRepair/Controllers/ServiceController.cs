@@ -35,13 +35,13 @@ namespace AutoRepair.Controllers
                 return new NotFoundViewResult("ProductNotFound");
             }
 
-            var product = await _serviceRepository.GetByIdAsync(id.Value);
-            if (product == null)
+            var service = await _serviceRepository.GetByIdAsync(id.Value);
+            if (service == null)
             {
                 return new NotFoundViewResult("ProductNotFound");
             }
 
-            return View(product);
+            return View(service);
         }
 
 
@@ -63,9 +63,9 @@ namespace AutoRepair.Controllers
             if (ModelState.IsValid)
             {
 
-                var product = _serviceRepository.ToService(model, true);
+                var service = _serviceRepository.ToService(model, true);
 
-                await _serviceRepository.CreateAsync(product);
+                await _serviceRepository.CreateAsync(service);
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -82,14 +82,14 @@ namespace AutoRepair.Controllers
                 return new NotFoundViewResult("ProductNotFound");
             }
 
-            var product = await _serviceRepository.GetByIdAsync(id.Value);
-            if (product == null)
+            var service = await _serviceRepository.GetByIdAsync(id.Value);
+            if (service == null)
             {
                 return new NotFoundViewResult("ProductNotFound");
             }
 
 
-            var model = _serviceRepository.ToServiceViewModel(product);
+            var model = _serviceRepository.ToServiceViewModel(service);
             return View(model);
         }
 
@@ -107,10 +107,10 @@ namespace AutoRepair.Controllers
                 try
                 {
 
-                    var product = _serviceRepository.ToService(model, false);
+                    var service = _serviceRepository.ToService(model, false);
 
 
-                    await _serviceRepository.UpdateAsync(product);
+                    await _serviceRepository.UpdateAsync(service);
 
                 }
                 catch (DbUpdateConcurrencyException)
@@ -153,12 +153,12 @@ namespace AutoRepair.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _serviceRepository.GetByIdAsync(id);
+            var service = await _serviceRepository.GetByIdAsync(id);
 
             try
             {
                 //throw new Exception("Excepção de Teste");
-                await _serviceRepository.DeleteAsync(product);
+                await _serviceRepository.DeleteAsync(service);
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateException ex)
@@ -166,8 +166,8 @@ namespace AutoRepair.Controllers
 
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
                 {
-                    ViewBag.ErrorTitle = $"{product.ServiceName} provavelmente está a ser usado!!";
-                    ViewBag.ErrorMessage = $"{product.ServiceName} não pode ser apagado visto haverem encomendas que o usam.</br></br>" +
+                    ViewBag.ErrorTitle = $"{service.ServiceName} provavelmente está a ser usado!!";
+                    ViewBag.ErrorMessage = $"{service.ServiceName} não pode ser apagado visto haverem encomendas que o usam.</br></br>" +
                         $"Experimente primeiro apagar todas as encomendas que o estão a usar," +
                         $"e torne novamente a apagá-lo";
                 }

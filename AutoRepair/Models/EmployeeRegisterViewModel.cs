@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoRepair.Data.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace AutoRepair.Models
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
+        public bool? IsMechanic { get; set; }
 
         [Required]
         [Display(Name = "Last Name")]

@@ -68,14 +68,13 @@ namespace AutoRepair
             services.AddTransient<SeedDb>();
             services.AddScoped<IUserHelper, UserHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
-            services.AddScoped<IAutoPieceRepository, AutoPieceRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
-            services.AddScoped<ISpecialistTypeRepository, SpecialistTypeRepository>();
-            services.AddScoped<IMechanicRepository, MechanicRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IConverterUserHelper, ConverterUserHelper>();
             services.AddScoped<IBlobHelper, BlobHelper>();
             services.AddScoped<IModelRepository, ModelRepository>();
+            services.AddScoped<IInspecionRepository, InspecionRepository>();
+            services.AddScoped<IInspecionHelper, InspecionHelper>();
 
 
             services.AddScoped<IMailHelper, MailHelper>();

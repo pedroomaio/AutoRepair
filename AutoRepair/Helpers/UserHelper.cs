@@ -3,6 +3,7 @@ using AutoRepair.Data.Entities;
 using AutoRepair.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,7 +24,21 @@ namespace AutoRepair.Helpers
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
-       
+        public User ToUser(UsersViewModel model, Guid imageId)
+        {
+            return new User
+            {
+                Id = model.Id,
+                ImageId = imageId,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.UserName,
+                UserName = model.UserName,
+                Address = model.Address,
+                PhoneNumber = model.PhoneNumber,
+                AgreeTerm = model.AgreeTerm
+            };
+        }
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);

@@ -86,6 +86,14 @@ namespace AutoRepair.Data
             return await _context.Brands
                 .Where(c => c.UserId == id)
                 .FirstOrDefaultAsync();
+        }   
+        public async Task<Brand> GetBrandAsync()
+        {
+            //return await _context.Brands.FindAsync(id);
+
+            var a = _context.Brands;
+            return await _context.Brands
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Brand> GetBrandAsync(int id)

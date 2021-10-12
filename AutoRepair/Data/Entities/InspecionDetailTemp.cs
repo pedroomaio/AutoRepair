@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace AutoRepair.Data.Entities
 {
-    public class Service : IEntity
+    public class InspecionDetailTemp : IEntity
     {
         public int Id { get; set; }
-        [Display(Name = "Service")]
-        public string ServiceName { get; set; }
+
+        [Required]
+        public User User { get; set; }
+
+        [Required]
+        public Car Car{ get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Price { get; set; }

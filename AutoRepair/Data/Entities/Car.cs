@@ -12,10 +12,10 @@ namespace AutoRepair.Data.Entities
 
         public int BrandId { get; set; }
         public string Brand { get; set; }
-
+        public bool IsUsed { get; set; }
         public int ModelId { get; set; }
         public string Model { get; set; }
-
+        [Display(Name = "Register Car")]
         public string RegisterCar { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]

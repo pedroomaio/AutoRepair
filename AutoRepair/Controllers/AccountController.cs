@@ -70,8 +70,8 @@ namespace AutoRepair.Controllers
                     return this.RedirectToAction("Index", "Home");
                 }
             }
-            ViewBag.message = "qwe";
 
+            ViewBag.message = "error";
             ModelState.AddModelError(string.Empty, "Failed to login!");
 
 
@@ -159,6 +159,8 @@ namespace AutoRepair.Controllers
 
                 }
             }
+
+            ViewBag.message = "error";
             ModelState.AddModelError(string.Empty, "The user couldn't be created.");
             return View(model);
         }
@@ -168,7 +170,7 @@ namespace AutoRepair.Controllers
         public async Task<IActionResult> ChangeUser()
         {
             var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-            var model = new ChangeUserViewModel();
+            var model = new UsersViewModel();
             if (user != null)
             {
                 model.FirstName = user.FirstName;
@@ -176,6 +178,7 @@ namespace AutoRepair.Controllers
                 model.Address = user.Address;
                 model.PhoneNumber = user.PhoneNumber;
                 model.AgreeTerm = user.AgreeTerm;
+                model.ImageId = user.ImageId;
 
             }
             return View(model);
@@ -183,20 +186,29 @@ namespace AutoRepair.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ChangeUser(ChangeUserViewModel model)
+        public async Task<IActionResult> ChangeUser(UsersViewModel model)
         {
             if (ModelState.IsValid)
             {
+
                 var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 if (user != null)
                 {
 
+                    Guid imageId = model.ImageId;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                    }
+
+                    model.UserName = user.UserName;
 
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
                     user.Address = model.Address;
                     user.PhoneNumber = model.PhoneNumber;
-                    user.AgreeTerm = model.AgreeTerm;
+                    user.ImageId = imageId;
 
                     var response = await _userHelper.UpdateUserAsync(user);
                     if (response.Succeeded)
@@ -319,8 +331,6 @@ namespace AutoRepair.Controllers
             return View();
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> RecoverPassword(RecoverPasswordViewModel model)
         {
@@ -340,7 +350,7 @@ namespace AutoRepair.Controllers
                     "Account",
                     new { token = myToken }, protocol: HttpContext.Request.Scheme);
 
-                Response response = _mailHelper.SendEmail(model.Email, "Shop Password Reset", $"<h1>Shop Password Reset</h1>" +
+                Response response = _mailHelper.SendEmail(model.Email, "Repair Auto - Password Reset", $"<h1>Password Reset</h1>" +
                 $"To reset the password click in this link:</br></br>" +
                 $"<a href = \"{link}\">Reset Password</a>");
 

@@ -25,6 +25,7 @@ namespace AutoRepair.Models
 
         [MaxLength(100, ErrorMessage = "The field {0} only can contain {1} characters length.")]
         public string Address { get; set; }
+        [Required]
         public bool AgreeTerm { get; set; }
         [Display(Name = "Image")]
         public IFormFile ImageFile { get; set; }

@@ -10,7 +10,7 @@ namespace AutoRepair.Data
     public interface IUserRepository
     {
         List<User> GetAllUser();
-        Task<User> GetByIdAsync(string id);
+        Task<User> GetByIdAsync(string email);
 
         IQueryable<User> GetAll();
         Task CreateAsync(User entity);

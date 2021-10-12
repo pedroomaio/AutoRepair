@@ -27,6 +27,7 @@ namespace AutoRepair.Data
             await _userHelper.CheckRoleAsync("Admin");
             await _userHelper.CheckRoleAsync("Customer");
             await _userHelper.CheckRoleAsync("Employee");
+            await _userHelper.CheckRoleAsync("Mechanic");
 
 
 
@@ -69,6 +70,19 @@ namespace AutoRepair.Data
                         brands = brands,
                         Name = "Fiat"
                     });
+
+                    await _context.SaveChangesAsync();
+                }
+                if (!_context.Services.Any())
+                {
+                    _context.Services.Add(new Service { ServiceName = "Revision"});
+                    _context.Services.Add(new Service { ServiceName = "Oil Change"});
+                    _context.Services.Add(new Service { ServiceName = "Battery Checkup"});
+                    _context.Services.Add(new Service { ServiceName = "Braking"});
+                    _context.Services.Add(new Service { ServiceName = "Visibility"});
+                    _context.Services.Add(new Service { ServiceName = "Air Conditioning"});
+                    _context.Services.Add(new Service { ServiceName = "Suspension"});
+
 
                     await _context.SaveChangesAsync();
                 }

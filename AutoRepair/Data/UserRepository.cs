@@ -45,13 +45,11 @@ namespace AutoRepair.Data
         {
             return _context.Users.AsNoTracking();
         }
-        public async Task<User> GetByIdAsync(string id)
+        public async Task<User> GetByIdAsync(string email)
         {
-
-            var a = await _context.Users
+            return await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.ConcurrencyStamp == id);
-            return a;
+                .FirstOrDefaultAsync(e => e.Email == email);
         }
 
 

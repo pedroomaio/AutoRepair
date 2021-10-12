@@ -22,8 +22,32 @@ namespace AutoRepair.Data
         {
             return _context.Cars.Include(p => p.User);
         }
+        public Car GetAllIsNotUserWithUsers()
+        {
+            var a = new Car();
+           var aq = _context.Cars.Include(p => p.User);
 
+            foreach (var item in aq)
+            {
+                if (item.IsUsed)
+                {
+                    a = item;
+                }
+            }
+            return a;
+        }
 
+        public Car GetAllId(int id)
+        {
+            var a = new Car();
+
+           return  _context.Cars
+                .Include(c => c.User)
+                .Where(c => c.Id == id).FirstOrDefaultAsync().Result;
+            
+               
+
+        }
         public IEnumerable<SelectListItem> GetComboCars()
         {
 

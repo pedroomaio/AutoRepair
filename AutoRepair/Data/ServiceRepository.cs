@@ -23,7 +23,8 @@ namespace AutoRepair.Data
             return new Service
             {
                 Id = isNew ? 0 : models.Id,
-                ServiceName = models.ServiceName
+                ServiceName = models.ServiceName,
+                Price=models.Price
             };
         }
 
@@ -32,7 +33,8 @@ namespace AutoRepair.Data
             return new ServicesViewModel
             {
                 Id = service.Id,
-                ServiceName = service.ServiceName
+                ServiceName = service.ServiceName,
+                Price=service.Price
             };
         }
     }

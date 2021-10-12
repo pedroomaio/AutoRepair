@@ -57,7 +57,7 @@
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">All Cars</a></li>
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">All Services</a></li>
                                 <li><a class="nav-link text-dark" asp-area="" asp-controller="SpecialistType" asp-action="Index">All Specialist Type</a></li>
-                                <li><a class="nav-link text-dark" asp-area="" asp-controller="AutoPieces" asp-action="Index">All Auto Pieces</a></li>
+                                <li><a class="nav-link text-dark" asp-area="" asp-controller="Models" asp-action="Index">All Models</a></li>
                             </ul>
                         </li>
                     }
@@ -74,6 +74,12 @@
                             <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" asp-area="" asp-controller="Cars" asp-action="Index">Your Cars</a>
                         </li>
                     }
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Mechanic"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" asp-area="" asp-controller="" asp-action="">Schedule</a>
+                        </li>
+                    }
                     @if (this.User.Identity.IsAuthenticated)
                     {
 
@@ -87,7 +93,7 @@
 
                                         @if (!string.IsNullOrEmpty(item.ImageFullPath))
                                         {
-                                            <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width:50px;height:50px;max-width:100%;height:auto;" />
+                                            <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width: 50px; height: 79px; max-width: 100%; border-radius: 50%; height: auto; " />
 
                                         }
 
@@ -97,19 +103,19 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @*<li>
-                                        <a class="nav-link">@this.User.Identity.Name</a>
-                                    </li>*@
+                        <a class="nav-link">@this.User.Identity.Name</a>
+                    </li>*@
                                 <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="ChangeUser">Edit Profile</a></li>
                                 <li><a class="nav-link" asp-area="" asp-controller="Account" asp-action="ResetPassword">Reset Password</a></li>
                             </ul>
                         </li>
 
-                        <li class="nav-item" style="margin-top: -10%; ">
+                        <li class="nav-item" style="margin-top: -4%; ">
                             <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" asp-area="" asp-controller="Account" asp-action="Logout">
                                 <lord-icon src="https://cdn.lordicon.com/lywgqtim.json"
                                            trigger="loop-on-hover"
                                            colors="primary:#000000,secondary:#000000"
-                                           style="width:75px;height:75px">
+                                           style="width:50px;height:50px">
                                 </lord-icon>
                             </a>
                         </li>
@@ -141,7 +147,7 @@
 
             <img class="sp-image" src="~/Home/images/slider/slider-img-1.jpg" alt="Slider 1" />
 
-            <h1 class="sp-layer slider-text-big"
+            <h1 class="sp-layer slider-text-big" style="margin-bottom:4%"
                 data-position="center bottom" data-show-transition="left" data-hide-transition="right" data-show-delay="1500" data-hide-delay="200">
                 <span class="highlight-texts">Fast Car Repair</span>
             </h1>
@@ -153,7 +159,7 @@
             <div class="img-overlay"></div>
             <img class="sp-image" src="~/Home/images/slider/slider-img-2.jpg" alt="Slider 2" />
 
-            <h1 class="sp-layer slider-text-big"
+            <h1 class="sp-layer slider-text-big" style="margin-bottom:4%"
                 data-position="center bottom" data-show-transition="left" data-hide-transition="right" data-show-delay="1500" data-hide-delay="200">
                 <span class="highlight-texts">Best Car Service</span>
             </h1>
@@ -166,7 +172,7 @@
 
             <img class="sp-image" src="~/Home/images/slider/slider-img-3.jpg" alt="Slider 3" />
 
-            <h1 class="sp-layer slider-text-big"
+            <h1 class="sp-layer slider-text-big" style="margin-bottom:4%"
                 data-position="center bottom" data-show-transition="left" data-hide-transition="right" data-show-delay="1500" data-hide-delay="200">
                 <span class="highlight-texts">Lazer Car Paint</span>
             </h1>
@@ -179,7 +185,7 @@
 
 <section class="text-center" style="margin-top:4%">
 
-    <a asp-area="" asp-controller="Inspecion" asp-action="Index" class="btn btn-primary">Make your simulation now free</a>
+    <a asp-area="" asp-controller="Inspecion" asp-action="Create" class="btn btn-danger"><h1>Make your simulation now free</h1></a>
 </section>
 
 <section id="services" style="background-color: #6C757D; margin-top: 4%" class="section-wrapper">
@@ -190,7 +196,9 @@
             <div class="col-md-12 col-sm-12 col-xs-12 section-header wow fadeInDown">
                 <h2><span class="highlight-text">Services</span></h2>
 
-                <p class="col-md-8 col-sm-10 col-xs-12 col-md-offset-2 col-sm-offset-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, nam corporis quas, saepe minima error aperiam dolorum aliquam, quis deserunt eos eius quisquam odio itaque in minus distinctio dolores ipsam.</p>
+                <p class="col-md-8 col-sm-10 col-xs-12 col-md-offset-2 col-sm-offset-1">
+                    AutoRepair covers all services, including: maintenance, oil changes, tires, braking, suspension, fault detection, among others, always respecting your car manufacturer's choices.
+                </p>
             </div>
 
 
@@ -201,27 +209,27 @@
                     <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".2s">
                         <div class="service-box">
                             <div class="icon">
-                                <i class="icon_cone"></i> <h3>Car Repair</h3>
+                                <i class="icon_cone"></i> <h3>REVISION</h3>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                            <p>Strict verification of essential points and replacement of wear parts according to the manufacturer's recommendations.</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".2s">
                         <div class="service-box">
                             <div class="icon">
-                                <i class="icon_mug"></i><h3>Car Wash </h3>
+                                <i class="icon_mug"></i><h3>OIL CHANGE</h3>
                             </div>
 
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                            <p>Oil is an essential element of your car's engine as it reduces friction and wear on moving parts and contributes to the sealing of the pistons in the cylinders.</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".2s">
                         <div class="service-box">
                             <div class="icon">
-                                <i class="icon_currency"></i><h3>Car Checkup</h3>
+                                <i class="icon_currency"></i><h3>PNEUS</h3>
                             </div>
 
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                            <p>The tires ensure good roadholding on wet ground, in corners, effective braking, but also greater driving comfort. In other words, they guarantee comfort, efficiency and safety..</p>
                         </div>
                     </div>
 
@@ -231,19 +239,19 @@
                     <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".1s">
                         <div class="service-box">
                             <div class="icon">
-                                <i class="icon_star-half_alt"></i><h3>Mobile Service</h3>
+                                <i class="icon_star-half_alt"></i><h3>BRAKING</h3>
                             </div>
 
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                            <p>The good condition of the brake pads and discs, as well as the respective hydraulic circuit, are the guarantee of your safety regardless of weather conditions or the state of the road.</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".1s">
                         <div class="service-box">
                             <div class="icon">
-                                <i class="icon_music"></i><h3>Car Painting</h3>
+                                <i class="icon_cone_alt"></i><h3>PERIODIC INSPECTION</h3>
                             </div>
 
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                            <p>Mandatory Periodic Inspection is a regular technical inspection of your vehicle!</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12 wow fadeInDown" data-wow-delay=".1s">
@@ -252,7 +260,7 @@
                                 <i class="icon_cog"></i><h3>Car Sales</h3>
                             </div>
 
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero praesentium quam nulla, porro nemo.</p>
+                            <p>Seeing well and being well regarded is one of the basic rules to be respected for safe driving.</p>
                         </div>
                     </div>
                 </div>
@@ -261,128 +269,131 @@
         </div>
     </div>
 </section>
-
-<section id="pricing" class="pricing-section">
-    <div class="container">
-        <div class="row">
-
-
-            <div class="col-md-12 col-sm-12 col-xs-12 section-header wow fadeInDown">
-                <h2><span class="highlight-text">Pricing</span></h2>
-
-                <p class="col-md-8 col-sm-10 col-xs-12 col-md-offset-2 col-sm-offset-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, nam corporis quas, saepe minima error aperiam dolorum aliquam, quis deserunt eos eius quisquam odio itaque in minus distinctio dolores ipsam.</p>
-            </div>
+<center>
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <div class="row">
 
 
-            <div class="pricing-wrapper">
+                <div class="col-md-12 col-sm-12 col-xs-12 section-header wow fadeInDown">
+                    <h2><span class="highlight-text">Pricing</span></h2>
 
-
-                <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow bounceInLeft hoverer">
-                    <div class="pricing-titles">
-                        <h2>Bronze</h2>
-                        <p><span>$16/</span></p>
-                    </div>
-                    <div class="pricing-service-name">
-                        <ul>
-                            <li>Car Checkup</li>
-                            <li>Responsive</li>
-                            <li>3 Years Hosting</li>
-                            <li>100 GB Data</li>
-                            <li>Unlimited Bandwidth</li>
-                            <li>24/7 Support</li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-btn">
-                        <a asp-action="Index" asp-controller="Inspecion" asp-route-id="1" class="btn btn-warning">Get Now</a>
-                    </div>
+                    <p class="col-md-8 col-sm-10 col-xs-12 col-md-offset-2 col-sm-offset-1">
+                        Packs with some of the services offered by AutoRepair. If you are undecided or do not know which one to choose, please do not hesitate to contact us.
+                    </p>
                 </div>
 
 
-                <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow fadeInUp hoverer" data-wow-duration="1s">
-                    <div class="pricing-titles">
-                        <h2>Gold</h2>
-                        <p><span>$69/</span></p>
-                    </div>
-                    <div class="pricing-service-name">
-                        <ul>
-                            <li>Car Wash</li>
-                            <li>Responsive</li>
-                            <li>3 Years Hosting</li>
-                            <li>100 GB Data</li>
-                            <li>Unlimited Bandwidth</li>
-                            <li>24/7 Support</li>
-                        </ul>
+                <div class="pricing-wrapper">
+
+
+                    <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow bounceInLeft hoverer">
+                        <div class="pricing-titles">
+                            <h2>BASIC</h2>
+                            <p><span>$16/</span></p>
+                        </div>
+                        <div class="pricing-service-name">
+                            <ul>
+                                <li>Revision</li>
+                                <li>Oil Change</li>
+                                <li> </li>
+                                <li> </li>
+                                <li> </li>
+                                <li> </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-btn">
+                            <a href="~/Inspecion/Create/1" class="btn btn-warning">Get Now</a>
+                        </div>
                     </div>
 
-                    <div class="bg-btn">
-                        <a asp-action="Index" asp-controller="Inspecion" asp-route-id="2" class="btn btn-warning">Get Now</a>
+
+                    <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow fadeInUp hoverer" data-wow-duration="1s">
+                        <div class="pricing-titles">
+                            <h2>PLUS</h2>
+                            <p><span>$69/</span></p>
+                        </div>
+                        <div class="pricing-service-name">
+                            <ul>
+                                <li>Revision</li>
+                                <li>Oil Change</li>
+                                <li>Battery Checkup</li>
+                                <li>Braking</li>
+                                <li>Visibility</li>
+                                <li> </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-btn">
+                            <a href="~/Inspecion/Create/2" class="btn btn-warning">Get Now</a>
+                        </div>
                     </div>
+
+
+                    <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow bounceInRight hoverer">
+                        <div class="pricing-titles">
+                            <h2>PREMIUM</h2>
+                            <p><span>$99/</span></p>
+                        </div>
+                        <div class="pricing-service-name">
+                            <ul>
+                                <li>Revision</li>
+                                <li>Oil Change</li>
+                                <li>Battery Checkup</li>
+                                <li>Braking</li>
+                                <li>Air Conditioning</li>
+                                <li>Suspension</li>
+                            </ul>
+                        </div>
+                        <div class="bg-btn">
+                            <a href="~/Inspecion/Create/3" class="btn btn-warning">Get Now</a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="footer-container" style="background-color: #6C757D; font:white">
+        <div class="container" style="color: white">
+            <div class="row footer-containertent">
+                <div class="col-md-4" style="color: white">
+
+                    <img src="~/Img/Icon.png" width="50" alt="">
+                    <br />
+                    <br />
+                    <p style="color: white">We are a new AutoRepair that with our products we always try to fund a solution to your problems every day.</p>
+
+                    <hr />
                 </div>
 
-
-                <div class="col-md-4 col-sm-4 col-xs-12 pricing-plans wow bounceInRight hoverer">
-                    <div class="pricing-titles">
-                        <h2>Platinum</h2>
-                        <p><span>$99/</span></p>
-                    </div>
-                    <div class="pricing-service-name">
-                        <ul>
-                            <li>Car Repair</li>
-                            <li>Responsive</li>
-                            <li>3 Years Hosting</li>
-                            <li>100 GB Data</li>
-                            <li>Unlimited Bandwidth</li>
-                            <li>24/7 Support</li>
-                        </ul>
-                    </div>
-                    <div class="bg-btn">
-                        <a asp-action="Index" asp-controller="Inspecion" asp-route-id="3" class="btn">Get Now</a>
-                    </div>
+                <div class="col-md-4 contac-us" style="color: white">
+                    <h3 style="color: white">Contact Us</h3>
+                    <ul>
+                        <li style="color: white"><i class="fa fa-phone"></i>001 123 12345 99</li>
+                        <li style="color: white"><i class="fa fa-envelope-o"></i>repairnauto@gmail.com</li>
+                    </ul>
                 </div>
-
-
             </div>
         </div>
-    </div>
-</section>
-<section class="footer-container" style="background-color: #6C757D ">
-    <div class="container">
-        <div class="row footer-containertent">
-            <div class="col-md-4">
+    </section>
 
-                <img src="~/Img/Icon.png" width="50" alt="">
-                <br />
-                <br />
-                <p>We are a new AutoRepair that with our products we always try to fund a solution to your problems every day.</p>
+    <footer style="background-color: #6C757D;color:white">
 
-                <hr />
-            </div>
+        <div class="container">
+            <div class="row">
+                <div class="footer-containertent">
 
-            <div class="col-md-4 contac-us">
-                <h3>Contact Us</h3>
-                <ul>
-                    <li><i class="fa fa-phone"></i>001 123 12345 99</li>
-                    <li><i class="fa fa-envelope-o"></i>repairnauto@gmail.com</li>
-                </ul>
+
+                    <br /><br />
+                    <p>Copyright © 2021      -      AutoRepair      -      Pedro Maio</p>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-
-<footer style="background-color: #6C757D">
-
-    <div class="container">
-        <div class="row">
-            <div class="footer-containertent">
-
-
-                <br /><br />
-                <p>Copyright © 2021      -      AutoRepair      -      Pedro Maio</p>
-            </div>
-        </div>
-    </div>
-</footer>
+    </footer>
+</center>
 
 <!--<section id="contact" class="section-wrapper contact-section" data-stellar-background-ratio="0.5">
     <div class="parallax-overlay"></div>
@@ -459,3 +470,20 @@
 
 
 <script src="~/Home/js/custom.js"></script>
+
+<script>
+
+    /*    <!-- GetButton.io widget -->*/
+    (function () {
+        var options = {
+            email: "repairnauto@gmail.com", // Email
+            call_to_action: "Envia-nos uma mensagem", // Call to action
+            position: "right", // Position may be 'right' or 'left'
+        };
+        var proto = document.location.protocol, host = "getbutton.io", url = proto + "//static." + host;
+        var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = url + '/widget-send-button/js/init.js';
+        s.onload = function () { WhWidgetSendButton.init(host, proto, options); };
+        var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x);
+    })();
+
+</script>
