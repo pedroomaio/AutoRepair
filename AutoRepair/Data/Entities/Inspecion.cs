@@ -10,19 +10,24 @@ namespace AutoRepair.Data.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "Prefer Date")]
+        [Display(Name = "Inspecion Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public DateTime InspecionDate { get; set; }
+        [Display(Name = "Inspecion Date Start")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         [Required]
-        public DateTime? PreferDate { get; set; }
-        [Required]
-        public double? PreferHours { get; set; }
-        [Required]
+        public DateTime? InspecionDateStart { get; set; }
+       
+        public string InspecionHours { get; set; }
+       
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Price { get; set; }
-        public int ServiceId { get; set; }
-        public Service Service { get; set; }
+        [Display(Name = "Is Active")]
+        public bool IsActive{ get; set; }
+
+
+        
         public IEnumerable<InspecionDetails> Items { get; set; }
-        public int ClientId { get; set; }
         public User User { get; set; }
     }
 }

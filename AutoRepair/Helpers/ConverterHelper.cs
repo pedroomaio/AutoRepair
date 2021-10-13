@@ -21,9 +21,28 @@ namespace AutoRepair.Helpers
                 Colour = model.Colour,
                 User = model.User,
                 BrandId = model.BrandId,
-                ModelId = model.ModelId
+                ModelId = model.ModelId,
+                IsUsed = true
+            };
+        }     
+        
+        public Car ToCarUpdate(Car model)
+        {
+            return new Car
+            {
+                Id = model.Id,
+                Brand = model.Brand,
+                RegisterCar = model.RegisterCar,
+                Year = model.Year,
+                Model = model.Model,
+                Colour = model.Colour,
+                User = model.User,
+                BrandId = model.BrandId,
+                ModelId = model.ModelId,
+                IsUsed = false
             };
         }
+
 
         public CarsViewModel ToCarsViewModel(Car Cars)
         {
@@ -37,7 +56,8 @@ namespace AutoRepair.Helpers
                 Colour = Cars.Colour,
                 User = Cars.User,
                 ModelId = Cars.ModelId,
-                BrandId = Cars.BrandId
+                BrandId = Cars.BrandId,
+                IsUsed = true
             };
         }
 

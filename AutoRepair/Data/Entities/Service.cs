@@ -14,5 +14,8 @@ namespace AutoRepair.Data.Entities
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Price { get; set; }
+
+        public string UserId { get; set; }
+        public User User { get; set; }
     }
 }

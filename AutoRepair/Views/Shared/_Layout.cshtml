@@ -19,8 +19,9 @@
     <link rel="stylesheet" href="~/Home/elegant_font/style.css">
     <link rel="stylesheet" href="~/Home/css/style.css">
 
-
     <script src="https://cdn.lordicon.com/libs/mssddfmo/lord-icon-2.1.0.js"></script>
+
+
 </head>
 <body>
     <header>
@@ -55,7 +56,6 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">All Cars</a></li>
                                     <li><a class="nav-link text-dark" asp-area="" asp-controller="Service" asp-action="Index">All Services</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="SpecialistType" asp-action="Index">All Specialist Type</a></li>
                                     <li><a class="nav-link text-dark" asp-area="" asp-controller="Models" asp-action="Index">All Models</a></li>
                                 </ul>
                             </li>
@@ -81,16 +81,8 @@
                         }
                         @if (this.User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item dropdown" style=" margin-top: -6%;">
 
-                                <!--<ul class="nav navbar-nav menu-wrapper display-flex-center">-->
-                                @*<li>
-                                        <a class="nav-link">@this.User.Identity.Name</a>
-                                    </li>*@
-                                <!--<li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangeUser">Edit Profile</a></li>
-                                    <li><a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ResetPassword">Reset Password</a></li>
-                                </ul>-->
-                            </li>
+                           
 
                             <li class="nav-item" style="margin-top: -4%; ">
                                 <a class="nav-link text-dark font-weight-bold" style=" font-size: 15pt; color:black" asp-area="" asp-controller="Account" asp-action="Logout">
@@ -165,7 +157,6 @@
         </footer>*@
 
     @await RenderSectionAsync("Scripts", required: false)
-
 
     <script src="~/Home/js/modernizr.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

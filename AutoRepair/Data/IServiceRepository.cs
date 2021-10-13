@@ -7,7 +7,7 @@ namespace AutoRepair.Data
     public interface IServiceRepository : IGenericRepository<Service>
     {
         public IQueryable GetAllWithUsers();
-        public Service ToService(Service models, bool isNew);
-        public ServicesViewModel ToServiceViewModel(Service service);
+        Service ToService(Service models, bool isNew, string userid);
+        ServicesViewModel ToServiceViewModel(Service service, string userid);
     }
 }

@@ -15,26 +15,28 @@ namespace AutoRepair.Data
         }
         public IQueryable GetAllWithUsers()
         {
-            return _context.Cars.Include(p => p.User);
+            return _context.Services.Include(p => p.User);
         }
 
-        public Service ToService(Service models, bool isNew)
+        public Service ToService(Service models, bool isNew, string userid)
         {
             return new Service
             {
                 Id = isNew ? 0 : models.Id,
                 ServiceName = models.ServiceName,
-                Price=models.Price
+                Price=models.Price,
+                UserId= userid
             };
         }
 
-        public ServicesViewModel ToServiceViewModel(Service service)
+        public ServicesViewModel ToServiceViewModel(Service service, string userid)
         {
             return new ServicesViewModel
             {
                 Id = service.Id,
                 ServiceName = service.ServiceName,
-                Price=service.Price
+                Price=service.Price,
+                UserId= userid
             };
         }
     }

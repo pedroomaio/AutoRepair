@@ -1,9 +1,5 @@
-﻿using AutoRepair.Data.Entities;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AutoRepair.Models
 {
@@ -22,5 +18,7 @@ namespace AutoRepair.Models
         [Required]
         [DataType(DataType.EmailAddress)]
         public string Username { get; set; }
+        [Display(Name = "Image")]
+        public IFormFile ImageFile { get; set; }
     }
 }

@@ -25,31 +25,29 @@ namespace AutoRepair.Controllers
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
         private readonly IConverterUserHelper _converterUserHelper;
-       
-        //private readonly ICountryRepository _countryRepository;
+        private readonly IBlobHelper _blobHelper;
+
 
         public EmployeeController(
             IUserHelper userHelper,
             IMailHelper mailHelper,
             IConfiguration configuration,
             IUserRepository userRepository,
-            IConverterUserHelper converterUserHelpe)
-        //ICountryRepository countryRepository)
+            IConverterUserHelper converterUserHelper,
+            IBlobHelper blobHelper)
+
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _configuration = configuration;
             _userRepository = userRepository;
-            
-            //_countryRepository = countryRepository;
+            _converterUserHelper = converterUserHelper;
+            _blobHelper = blobHelper;
         }
 
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            //var a = _userRepository.GetAllUser();
-
-
             return View(_userRepository.GetAllUser());
 
         }
@@ -74,7 +72,13 @@ namespace AutoRepair.Controllers
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
                 if (user == null)
                 {
+                    Guid imageId = Guid.Empty;
 
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                    }
                     user = new User
                     {
                         FirstName = model.FirstName,
@@ -82,6 +86,8 @@ namespace AutoRepair.Controllers
                         Email = model.Username,
                         UserName = model.Username,
                         AgreeTerm = true,
+                        IsMechanic = model.IsMechanic,
+                        ImageId = imageId
                     };
 
                     var result = await _userHelper.AddUserAsync(user, "123456");
@@ -91,49 +97,100 @@ namespace AutoRepair.Controllers
                         return View(model);
                     }
 
-                    await _userHelper.AddUserToRoleAsync(user, "Employee");
-                    var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    await _userHelper.ConfirmEmailAsync(user, token);
-
+                    if (user.IsMechanic == false)
+                    {
+                        await _userHelper.AddUserToRoleAsync(user, "Employee");
+                        var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        await _userHelper.ConfirmEmailAsync(user, token);
+                    }
+                    else
+                    {
+                        await _userHelper.AddUserToRoleAsync(user, "Mechanic");
+                        var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        await _userHelper.ConfirmEmailAsync(user, token);
+                    }
                 }
-
-                var isInRole = await _userHelper.IsUserInRoleAsync(user, "Employee");
-                if (!isInRole)
+                if (user.IsMechanic == false)
                 {
-                    await _userHelper.AddUserToRoleAsync(user, "Employee");
+                    var isInRole = await _userHelper.IsUserInRoleAsync(user, "Employee");
+                    if (!isInRole)
+                    {
+                        await _userHelper.AddUserToRoleAsync(user, "Employee");
+                    }
+                    else
+                    {
+                        string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        string tokenLink = Url.Action("Login", "Account", new
+                        {
+
+                        }, protocol: HttpContext.Request.Scheme);
+
+                        Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                                                  $"To allow the user, " +
+                            $"<br /><br /><br /> <h1>------- Account Details---------------------------------------------------------------</h1>" +
+                            $"<br /><br />" +
+
+                            $"Gmail: {user.Email}" + $"<br />" +
+                            $"Password: 123456" +
+
+                            $"<br /><br />IMPORTANT:" +
+                            $"<br />Change password!!" +
+                            $"<br /><br /><br />Please click in this link:</br></br><a href = \"{tokenLink}\">Go to Login Email</a>");
+
+
+                        if (response.IsSuccess)
+                        {
+                            ModelState.AddModelError(string.Empty, "Employee created successfully!" +
+                                "\n\nAn email has been sent to employee confirming the account.");
+
+                            await Logout();
+
+                            return View(model);
+                        }
+
+                        ModelState.AddModelError(string.Empty, "The user couldn't be logget.");
+                    }
                 }
                 else
                 {
-                    string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    string tokenLink = Url.Action("Login", "Account", new
+                    var isInRole = await _userHelper.IsUserInRoleAsync(user, "Mechanic");
+                    if (!isInRole)
                     {
-
-                    }, protocol: HttpContext.Request.Scheme);
-
-                    Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                                              $"To allow the user, " +
-                        $"<br /><br /><br /> <h1>------- Account Details---------------------------------------------------------------</h1>" +
-                        $"<br /><br />" +
-
-                        $"Gmail: {user.Email}" + $"<br />" +
-                        $"Password: 123456" +
-
-                        $"<br /><br />IMPORTANT:" +
-                        $"<br />Change password!!" +
-                        $"<br /><br /><br />Please click in this link:</br></br><a href = \"{tokenLink}\">Go to Login Email</a>");
-
-
-                    if (response.IsSuccess)
-                    {
-                        ModelState.AddModelError(string.Empty, "Employee created successfully!" +
-                            "\n\nAn email has been sent to employee confirming the account.");
-
-                        await Logout();
-
-                        return View(model);
+                        await _userHelper.AddUserToRoleAsync(user, "Mechanic");
                     }
+                    else
+                    {
+                        string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                        string tokenLink = Url.Action("Login", "Account", new
+                        {
 
-                    ModelState.AddModelError(string.Empty, "The user couldn't be logget.");
+                        }, protocol: HttpContext.Request.Scheme);
+
+                        Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                                                  $"To allow the user, " +
+                            $"<br /><br /><br /> <h1>------- Account Details---------------------------------------------------------------</h1>" +
+                            $"<br /><br />" +
+
+                            $"Gmail: {user.Email}" + $"<br />" +
+                            $"Password: 123456" +
+
+                            $"<br /><br />IMPORTANT:" +
+                            $"<br />Change password!!" +
+                            $"<br /><br /><br />Please click in this link:</br></br><a href = \"{tokenLink}\">Go to Login Email</a>");
+
+
+                        if (response.IsSuccess)
+                        {
+                            ModelState.AddModelError(string.Empty, "Employee created successfully!" +
+                                "\n\nAn email has been sent to employee confirming the account.");
+
+                            await Logout();
+
+                            return View(model);
+                        }
+
+                        ModelState.AddModelError(string.Empty, "The user couldn't be logget.");
+                    }
                 }
 
             }
@@ -142,9 +199,21 @@ namespace AutoRepair.Controllers
         }
 
 
-        public IActionResult ChangePassword()
+        public async Task<IActionResult> ChangeUser()
         {
-            return View();
+            var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+            var model = new EmployeeRegisterViewModel();
+            if (user != null)
+            {
+                //model.FirstName = user.FirstName;
+                //model.LastName = user.LastName;
+                //model.Address = user.Address;
+                //model.PhoneNumber = user.PhoneNumber;
+                //model.AgreeTerm = user.AgreeTerm;
+                //model.ImageId = user.ImageId;
+
+            }
+            return View(model);
         }
 
 
@@ -335,9 +404,15 @@ namespace AutoRepair.Controllers
             }
             foreach (var item in _userRepository.GetAllUser())
             {
-                if (id == item.Id)
+                if (id == item.Email)
                 {
-                    var model = _converterUserHelper.ToUserViewModel(user);
+                    var model = new EmployeeRegisterViewModel();
+
+                    model.FirstName = item.FirstName;
+                    model.LastName = item.LastName;
+                    model.Username = item.UserName;
+                    model.IsMechanic = item.IsMechanic;
+
                     return View(model);
                 }
             }

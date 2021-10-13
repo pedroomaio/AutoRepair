@@ -92,29 +92,26 @@ namespace AutoRepair.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("InspecionDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("PreferDate")
+                    b.Property<DateTime?>("InspecionDateStart")
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<double?>("PreferHours")
-                        .IsRequired()
-                        .HasColumnType("float");
+                    b.Property<string>("InspecionHours")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ServiceId");
 
                     b.HasIndex("UserId");
 
@@ -213,7 +210,12 @@ namespace AutoRepair.Migrations
                     b.Property<string>("ServiceName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Services");
                 });
@@ -250,15 +252,6 @@ namespace AutoRepair.Migrations
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("IdAmin")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IdClient")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IdEmployee")
-                        .HasColumnType("bit");
 
                     b.Property<Guid>("ImageId")
                         .HasColumnType("uniqueidentifier");
@@ -467,17 +460,9 @@ namespace AutoRepair.Migrations
 
             modelBuilder.Entity("AutoRepair.Data.Entities.Inspecion", b =>
                 {
-                    b.HasOne("AutoRepair.Data.Entities.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("AutoRepair.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("Service");
 
                     b.Navigation("User");
                 });
@@ -508,6 +493,15 @@ namespace AutoRepair.Migrations
                         .HasForeignKey("InspecionId");
 
                     b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("AutoRepair.Data.Entities.Service", b =>
+                {
+                    b.HasOne("AutoRepair.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AutoRepair.Data.Entities.User", b =>

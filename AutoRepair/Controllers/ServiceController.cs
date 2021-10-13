@@ -14,11 +14,13 @@ namespace AutoRepair.Controllers
     public class ServiceController : Controller
     {
         private readonly IServiceRepository _serviceRepository;
+        private readonly IUserHelper _userHelper;
 
         public ServiceController(
-            IServiceRepository serviceRepository)
+            IServiceRepository serviceRepository, IUserHelper userHelper)
         {
             _serviceRepository = serviceRepository;
+            _userHelper = userHelper;
         }
 
         // GET: Products
@@ -62,8 +64,8 @@ namespace AutoRepair.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                var service = _serviceRepository.ToService(model, true);
+                var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                var service = _serviceRepository.ToService(model, true, user.Id);
 
                 await _serviceRepository.CreateAsync(service);
                 return RedirectToAction(nameof(Index));
@@ -88,8 +90,8 @@ namespace AutoRepair.Controllers
                 return new NotFoundViewResult("ProductNotFound");
             }
 
-
-            var model = _serviceRepository.ToServiceViewModel(service);
+            var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+            var model = _serviceRepository.ToServiceViewModel(service, user.Id);
             return View(model);
         }
 
@@ -106,8 +108,8 @@ namespace AutoRepair.Controllers
             {
                 try
                 {
-
-                    var service = _serviceRepository.ToService(model, false);
+                    var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                    var service = _serviceRepository.ToService(model, false, user.Id);
 
 
                     await _serviceRepository.UpdateAsync(service);

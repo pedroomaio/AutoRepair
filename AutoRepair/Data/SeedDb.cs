@@ -75,13 +75,13 @@ namespace AutoRepair.Data
                 }
                 if (!_context.Services.Any())
                 {
-                    _context.Services.Add(new Service { ServiceName = "Revision"});
-                    _context.Services.Add(new Service { ServiceName = "Oil Change"});
-                    _context.Services.Add(new Service { ServiceName = "Battery Checkup"});
-                    _context.Services.Add(new Service { ServiceName = "Braking"});
-                    _context.Services.Add(new Service { ServiceName = "Visibility"});
-                    _context.Services.Add(new Service { ServiceName = "Air Conditioning"});
-                    _context.Services.Add(new Service { ServiceName = "Suspension"});
+                    _context.Services.Add(new Service { ServiceName = "Revision", Price=123, UserId=user.Id});
+                    _context.Services.Add(new Service { ServiceName = "Oil Change", Price = 12, UserId = user.Id });
+                    _context.Services.Add(new Service { ServiceName = "Battery Checkup", Price = 20, UserId = user.Id });
+                    _context.Services.Add(new Service { ServiceName = "Braking", Price = 22, UserId = user.Id });
+                    _context.Services.Add(new Service { ServiceName = "Visibility", Price = 40, UserId = user.Id });
+                    _context.Services.Add(new Service { ServiceName = "Air Conditioning", Price = 50, UserId = user.Id });
+                    _context.Services.Add(new Service { ServiceName = "Suspension", Price = 75, UserId = user.Id });
 
 
                     await _context.SaveChangesAsync();

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<AutoRepair.Data.Entities.Inspecion>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+
+<p>
+    <a asp-action="Creater" class="btn btn-primary">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @if (this.User.IsInRole("Admin"))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.User.FullName)
+                </th>
+            }
+            @*<th>
+                    @Html.DisplayNameFor(model => model.)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.InspecionDateStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InspecionDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InspecionHours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (this.User.IsInRole("Employee"))
+                {
+                    <th>
+                        @Html.DisplayFor(modelItem => item.User.FullName)
+                    </th>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.InspecionDateStart)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InspecionDate)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.InspecionHours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.p)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>*@
+                <td>
+                    @if (this.User.IsInRole("Employee"))
+                    {
+                        <a asp-action="Deliver" asp-route-id="@item.Id" class="btn btn-info" id="btnDeliver">Deliver</a>
+                        <a asp-action="DeleteItem" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

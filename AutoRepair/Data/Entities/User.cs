@@ -24,9 +24,8 @@ namespace AutoRepair.Data.Entities
 
         [Display(Name = "Image")]
         public Guid ImageId { get; set; }
-        public bool IdAmin { get; set; }
-        public bool IdClient { get; set; }
-        public bool IdEmployee { get; set; }
+
+        
 
         public string ImageFullPath => ImageId == Guid.Empty
            ? $"https://autorepairtpsi.azurewebsites.net/Img/noimage.png"

@@ -1,4 +1,4 @@
-﻿@model AutoRepair.Models.UsersViewModel
+﻿@model AutoRepair.Models.EmployeeRegisterViewModel
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,9 +11,9 @@
     <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Username" />
 
-            <partial name="_Cars" />
+            <partial name="_employee" />
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

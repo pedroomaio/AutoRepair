@@ -10,10 +10,10 @@ namespace AutoRepair.Data
         public DbSet<Car> Cars { get; set; }
         public DbSet<Inspecion> Inspecions { get; set; }
         public DbSet<Service> Services { get; set; }
-        public DbSet<InspecionDetailTemp> InspecionDetailTemps { get; set; }
         public DbSet<Model> Models { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<InspecionDetails> InspecionDetails { get; set; }
+        public DbSet<InspecionDetailTemp> InspecionDetailTemps { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

@@ -92,7 +92,7 @@ namespace AutoRepair.Controllers
                 model.Cars = _carRepository.GetComboCars();
 
 
-                var brand = await _modelRepository.GetBrandWithUserAsync(user.Id);
+                var brand = await _modelRepository.GetBrandAsync();
                 if (brand != null)
                 {
                     var modelRepo = await _modelRepository.GetModelAsync(brand);
@@ -133,15 +133,52 @@ namespace AutoRepair.Controllers
 
                 var car = _converterHelper.ToCar(modelView, true);
 
+
+
+
+
                 car.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _carRepository.CreateAsync(car);
+
+
                 return RedirectToAction(nameof(Index));
             }
             return View(modelView);
         }
 
+        public async Task<IActionResult> IsUsed()
+        {
+            var a = _carRepository.GetAllIsNotUserWithUsers();
 
 
+            var updatecar = _converterHelper.ToCarUpdate(a);
+            var car = await _carRepository.GetByIdAsync(a.Id);
+
+            await _carRepository.DeleteAsync(car);
+            await _carRepository.CreateAsync(updatecar);
+
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> IsUsed(int id)
+        {
+            var a = _carRepository.GetAllId(id);
+
+            if (a == null)
+            {
+
+
+                var updatecar = _converterHelper.ToCarUpdate(a);
+
+                await _carRepository.UpdateAsync(updatecar);
+
+                return (this.RedirectToAction("ChangeUser"));
+            }
+
+
+            return View();
+        }
         //// GET: Products/Edit/5
 
 
@@ -299,5 +336,12 @@ namespace AutoRepair.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Route("Cars/GetBrandsAsync")]
+        public async Task<JsonResult> GetBrandsAsync(int modelId)
+        {
+            var modelRepo = await _modelRepository.GetModelsWithBrandsAsync(modelId);
+            return Json(modelRepo.brands.OrderBy(c => c.Name));
+        }
     }
 }

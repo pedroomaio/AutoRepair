@@ -53,7 +53,7 @@ namespace AutoRepair.Data
 
             var list = _context.Cars.Select(p => new SelectListItem
             {
-                Text = p.Model,
+                Text = p.RegisterCar,
                 Value = p.Id.ToString()
             }).ToList();
 
