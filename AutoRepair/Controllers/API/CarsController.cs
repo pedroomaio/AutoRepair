@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace AutoRepair.Controllers.API
 {
 
-    [Route("api/[controller]")]
+    [Route("api/[controller]/{id}")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CarsController : Controller
     {
 
@@ -27,9 +27,10 @@ namespace AutoRepair.Controllers.API
 
 
         [HttpGet]
+        
         public IActionResult GetCars(int id)
         {
-            return Ok(_inspecionRepository.GetByIdAsync(id));
+            return Ok(_inspecionRepository.GetAllWithCars(id));
         }
     }
 }

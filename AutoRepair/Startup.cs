@@ -16,6 +16,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vereyon.Web;
+using Microsoft.Extensions.Azure;
+using Azure.Storage.Queues;
+using Azure.Storage.Blobs;
+using Azure.Core.Extensions;
 
 namespace AutoRepair
 {
@@ -43,21 +47,21 @@ namespace AutoRepair
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequiredLength = 6;
             })
-              .AddDefaultTokenProviders()
+              //.AddDefaultTokenProviders()
               .AddEntityFrameworkStores<DataContext>();
 
-            services.AddAuthentication()
-                .AddCookie()
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = this.Configuration["Tokens:Issuer"],
-                        ValidAudience = this.Configuration["Tokens:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(this.Configuration["Tokens:Key"]))
-                    };
-                });
+            //services.AddAuthentication()
+            //    .AddCookie()
+            //    .AddJwtBearer(cfg =>
+            //    {
+            //        cfg.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //            ValidIssuer = this.Configuration["Tokens:Issuer"],
+            //            ValidAudience = this.Configuration["Tokens:Audience"],
+            //            IssuerSigningKey = new SymmetricSecurityKey(
+            //                Encoding.UTF8.GetBytes(this.Configuration["Tokens:Key"]))
+            //        };
+            //    });
             services.AddDbContext<DataContext>(cfg =>
                        {
                            cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
@@ -86,8 +90,13 @@ namespace AutoRepair
                 options.AccessDeniedPath = "/Account/NotAuthorized";
             });
 
-            // services.AddScoped<IUserHelper, UserHelper>();
+
             services.AddControllersWithViews();
+            services.AddAzureClients(builder =>
+            {
+                builder.AddBlobServiceClient(Configuration["Blob:ConnectionString:blob"], preferMsi: true);
+                builder.AddQueueServiceClient(Configuration["Blob:ConnectionString:queue"], preferMsi: true);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -115,10 +124,42 @@ namespace AutoRepair
 
             app.UseEndpoints(endpoints =>
             {
+
+            //    endpoints.MapControllerRoute(
+            //       name: "DefaultApi",
+            //pattern: "api/{controller}/{id}"
+            //        );
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
             });
+        }
+    }
+    internal static class StartupExtensions
+    {
+        public static IAzureClientBuilder<BlobServiceClient, BlobClientOptions> AddBlobServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        {
+            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri serviceUri))
+            {
+                return builder.AddBlobServiceClient(serviceUri);
+            }
+            else
+            {
+                return builder.AddBlobServiceClient(serviceUriOrConnectionString);
+            }
+        }
+        public static IAzureClientBuilder<QueueServiceClient, QueueClientOptions> AddQueueServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        {
+            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri serviceUri))
+            {
+                return builder.AddQueueServiceClient(serviceUri);
+            }
+            else
+            {
+                return builder.AddQueueServiceClient(serviceUriOrConnectionString);
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace AutoRepair.Data
 
         Task<IQueryable<InspecionDetailTemp>> GetDetailTempsAsync(string userName);
 
-
+        IQueryable GetAllWithCars(int id);
         Task AddItemToOrderAsync(AddItemViewModel model, string userName);
 
 

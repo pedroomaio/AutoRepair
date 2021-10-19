@@ -19,6 +19,25 @@ namespace AutoRepair.Data
             _userHelper = userHelper;
         }
 
+        public IQueryable GetAllWithCars(int id)
+        {
+            var linqInspecion = from ID in _context.InspecionDetails
+                              join C in _context.Cars on ID.Car.Id equals C.Id
+                              where ID.Car.Id == id
+                              select new
+                              {
+                                  ID.Id,
+                                  ID.Car,
+                                  ID.EntryDate,
+                                  ID.ExitDate,
+                                  ID.InspesioStatus,
+                                  ID.TotalPrice
+                              };
+            var car = _context.Cars;
+            var details = _context.InspecionDetails;
+
+            return linqInspecion;
+        }
         public async Task AddItemToOrderAsync(AddItemViewModel model, string userName)
         {
             var user = await _userHelper.GetUserByEmailAsync(userName);
