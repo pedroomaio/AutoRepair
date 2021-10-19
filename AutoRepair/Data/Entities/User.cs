@@ -25,8 +25,6 @@ namespace AutoRepair.Data.Entities
         [Display(Name = "Image")]
         public Guid ImageId { get; set; }
 
-        
-
         public string ImageFullPath => ImageId == Guid.Empty
            ? $"https://autorepairtpsi.azurewebsites.net/Img/noimage.png"
            : $"https://autorepairtpsi.blob.core.windows.net/users/{ImageId}";
